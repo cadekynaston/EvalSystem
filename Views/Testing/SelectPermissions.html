@@ -1,11 +1,12 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang ="en-US">
 <head>
 	<title Secretary Permission Page>Select Permission</title>
 	<meta charset = "UTF-8"/>
 	<link rel = "stylesheet" type = "text/css" href = "SecretaryPermission.css">
 	<script type ="text/javascript">
-		var expanded = false;
+        var expanded = false;
+        var dExpanded = false;
 
 		function showCheckboxes() {
 		var checkboxes = document.getElementById("checkboxes");
@@ -16,7 +17,18 @@
 			checkboxes.style.display = "none";
 			expanded = false;
 		  }
-		}
+        }
+
+        function showDepartmentListCheckboxes() {
+            var dcheckboxes = document.getElementById("DepartmentListcheckboxes");
+            if (!dExpanded) {
+                dcheckboxes.style.display = "block";
+                dExpanded = true;
+            } else {
+                dcheckboxes.style.display = "none";
+                dExpanded = false;
+            }
+        }
 	</script>	
 </head>	
 <body>
@@ -57,6 +69,21 @@
 		</div>
 	
 	<br>
+	<h3>Select Department(s)</h3>
+	
+		<div class="DepartmentList">
+			    <div class="selectBox" onclick="showDepartmentListCheckboxes()">
+				<select>
+					<option>Select Department(s)</option>
+				</select>
+				<div class="overSelect"></div>
+				</div>
+				<div id="DepartmentListcheckboxes">
+					<label for ="ComputerScience"> <input type="checkbox" id="ComputerScience"/>1 ComputerScience</label>
+					<label for ="Math"><input type="checkbox" id="Math"/>2 Math</label>
+					<label for ="Physics"><input type="checkbox" id="Physics"/>3 Physics</label>										
+				</div>
+			</div>
 	
 	<div id="NextBackButton">
 		<button onclick="location.href='SelectInstructor.html'" type="button">
