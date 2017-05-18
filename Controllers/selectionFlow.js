@@ -118,7 +118,7 @@ app.controller("InstructorCourseController", function($scope, $http) {
 
 
 		if(courseOrInstructor == "Course"){
-            document.getElementById("pane4-title").innerHTML = "Select Courses";
+            document.getElementById("pane4-title").innerHTML = "Refine By Courses";
 			let departmentsSelectedJSONString = "{";
 			departmentsSelectedJSONString += "\"departments\":" + JSON.stringify(departmentsSelected);
 			departmentsSelectedJSONString += ",\"userID\":" + loggedInUserID;
@@ -157,7 +157,7 @@ app.controller("InstructorCourseController", function($scope, $http) {
 			);
 		}
 		else if(courseOrInstructor == "Instructor"){
-            document.getElementById("pane4-title").innerHTML = "Select Instructors";
+            document.getElementById("pane4-title").innerHTML = "Refine By Instructors";
 			let departmentsSelectedJSONString = "{";
 			departmentsSelectedJSONString += "\"departments\":" + JSON.stringify(departmentsSelected);
 			departmentsSelectedJSONString += "}";
