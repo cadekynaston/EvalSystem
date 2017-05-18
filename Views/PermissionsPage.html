@@ -1,0 +1,61 @@
+﻿<!DOCTYPE html>
+<html lang="en" ng-app="EvalSystem">
+<head>
+    <meta charset="utf-8" />
+    <title>Permissions</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular.js"></script>
+    <script src="../Controllers/PermissionsPage.js"></script>
+    <link rel="stylesheet" type="text/css" href="../CSS/PermissionsPage.css">
+</head>
+<body>
+    <div class="accordion Vertical-Accordian">
+        <ul>
+            <li>
+                <input id="pane1-button" type="radio" name="select" class="accordion-select" checked />
+                <div class="accordion-title">
+                    <span>Terms</span>
+                </div>
+                <div class="accordion-content" ng-controller="TermController">
+                    <h4 style="display:flex; justify-content:center; margin:auto">Select Terms to include</h4>
+                    <span style="display:flex; justify-content:center; margin-top:10px">
+                        <select id="termList" size="10" multiple>
+                            <option ng-repeat="term in terms" value="{{term.SemesterID}}">
+                                {{ term.Year + " " + term.SemesterName }}
+                            </option>
+                        </select>
+                    </span>
+                    <span style="display:flex; justify-content:center; margin-top:10px">
+                        <button name="select" ng-click="buildTermsSelected()">Next</button>
+                        <!-- <button name="select" onclick="getElementById('pane2-button').click()">Next</button> -->
+                    </span>
+                </div>
+                <div class="accordion-separator"></div>
+            </li>         
+            <li>
+                <input id="pane2-button" type="radio" name="select" class="accordion-select" />
+                <div class="accordion-title">
+                    <span>Report Selection</span>
+                </div>
+                <div class="accordion-content" ng-controller="ReportDisplayOptionsController">
+                    <h4 style="display:flex; justify-content:center; margin:auto">Report Options:</h4>
+                    <form id="reportOptionForm" action="" method="POST" onsubmit="return buildReport()">
+                        <div style="; width:300px; margin:auto">
+                            <input name="reportSelection-Radio" type="radio" value="term">Sort per Term<br>
+                            <input name="reportSelection-Radio" type="radio" value="dept">Sort per Department<br>
+                            <input name="reportSelection-Radio" type="radio" value="instr/course">Sort per Instructor/Course<br>
+                            <input name="reportSelection-Radio" type="radio" value="allReports">Display all as eval reports<br>
+                            <input name="reportSelection-Radio" type="radio" value="oneReport">Display all as one report<br>
+                        </div>
+                        <span style="display:flex; justify-content:center; margin-top:10px">
+                            <input type="submit" value="Build Report" />
+                        </span>
+                    </form>
+                </div>
+                <div class="accordion-separator"></div>
+            </li>
+        </ul>
+    </div>
+
+</body>
+</html>
