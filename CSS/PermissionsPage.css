@@ -23,8 +23,8 @@
     border-width: 0px;
     border-radius: 8px;
     margin: 0 auto;
-    height: 495px;
-    width: 700px;
+    height: 595px;
+    width: 800px;
 }
 
     .accordion.Vertical-Accordian > ul > li,
@@ -37,19 +37,19 @@
     .accordion.Vertical-Accordian > ul > li {
         background-color: #1f1f1f;
         margin-right: -0px;
-        margin-bottom: -415px;
+        margin-bottom: -515px;
     }
 
 .Vertical-Accordian .accordion-select:checked ~ .accordion-separator {
     margin-right: 0px;
-    margin-bottom: 415px;
+    margin-bottom: 515px;
 }
 
 .Vertical-Accordian .accordion-title,
 .Vertical-Accordian .accordion-select {
     background-color: #2d2d2d;
     color: #ffffff;
-    width: 700px;
+    width: 800px;
     height: 40px;
     font-size: 15px;
 }
@@ -78,8 +78,8 @@
 .Vertical-Accordian .accordion-content {
     background-color: #3e3e3e;
     color: #f5f2f0;
-    height: 358px;
-    width: 644px;
+    height: 458px;
+    width: 744px;
     padding: 28px;
 }
 
@@ -135,4 +135,14 @@
     -o-transition: margin 0.3s ease 0.1s;
     -moz-transition: margin 0.3s ease 0.1s;
     -webkit-transition: margin 0.3s ease 0.1s;
+}
+
+.addRemove{
+    height:40px;
+    width:70px;
+}
+
+h4{
+    margin:10px;
+
 }

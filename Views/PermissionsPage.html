@@ -14,10 +14,10 @@
             <li>
                 <input id="pane1-button" type="radio" name="select" class="accordion-select" checked />
                 <div class="accordion-title">
-                    <span>Terms</span>
+                    <span>Faculty Selection</span>
                 </div>
                 <div class="accordion-content" ng-controller="TermController">
-                    <h4 style="display:flex; justify-content:center; margin:auto">Select Terms to include</h4>
+                    <h4 style="display:flex; justify-content:center; margin:auto">Select Faculty Member to Modify Permissions</h4>
                     <span style="display:flex; justify-content:center; margin-top:10px">
                         <select id="termList" size="10" multiple>
                             <option ng-repeat="term in terms" value="{{term.SemesterID}}">
@@ -35,22 +35,68 @@
             <li>
                 <input id="pane2-button" type="radio" name="select" class="accordion-select" />
                 <div class="accordion-title">
-                    <span>Report Selection</span>
+                    <span>Permissions Selection</span>
                 </div>
-                <div class="accordion-content" ng-controller="ReportDisplayOptionsController">
-                    <h4 style="display:flex; justify-content:center; margin:auto">Report Options:</h4>
+                <div class="accordion-content" ng-controller="ReportDisplayOptionsController">                    
                     <form id="reportOptionForm" action="" method="POST" onsubmit="return buildReport()">
-                        <div style="; width:300px; margin:auto">
-                            <input name="reportSelection-Radio" type="radio" value="term">Sort per Term<br>
-                            <input name="reportSelection-Radio" type="radio" value="dept">Sort per Department<br>
-                            <input name="reportSelection-Radio" type="radio" value="instr/course">Sort per Instructor/Course<br>
-                            <input name="reportSelection-Radio" type="radio" value="allReports">Display all as eval reports<br>
-                            <input name="reportSelection-Radio" type="radio" value="oneReport">Display all as one report<br>
+                        <div id="LeftColumn" style="float:left;width:45%">
+                            <h4 style="display:flex; justify-content:center;">Permissions Options:</h4>
+                            <div id="checkboxes" style="width:300px; margin:auto; display:grid;overflow-y:scroll;height:185px;">
+                                <label for="Administrator"> <input type="radio" name="Role" id="Administrator" />1 Administrator</label>
+                                <label for="Manager"><input type="radio" name="Role" id="Manager" />2 Manager</label>
+                                <label for="Instructor"><input type="radio" name="Role" id="Instructor" />3 Instructor</label>
+                                <label for="Support Staff"><input type="radio" name="Role" id="Support Staff" />4 Support Staff</label>
+                                <label for="Site Admin"><input type="radio" name="Role" id="Site Admin" />5 Site Admin</label>
+                                <label for="Site Manager"><input type="radio" name="Role" id="Site Manager" />6 Site Manager</label>
+                                <label for="Site Staff"><input type="radio" name="Role" id="Site Staff" />7 Site Staff</label>
+                                <label for="Remote Proctor Admin"><input type="radio" name="Role" id="Remote Proctor Admin" />8 Remote Proctor Admin</label>
+                                <label for="Remote Proctor"><input type="radio" name="Role" id="Remote Proctor" />9 Remote Proctor</label>
+                                <label for="WSU Staff"><input type="radio" name="Role" id="WSU Staff" />10 WSU Staff</label>
+                                <label for="Adjunct"><input type="radio" name="Role" id="Adjunct" />11 Adjunct</label>
+                                <label for="Department Chair"><input type="radio" name="Role" id="Department Chair" />12 Department Chair</label>
+                                <label for="Dean"><input type="radio" name="Role" id="Dean" />13 Dean</label>
+                                <label for="Reports Instructor"><input type="radio" name="Role" id="Reports Instructor" />14 Reports Instructor</label>
+                                <label for="Tenure"><input type="radio" name="Role" id="Tenure" />15 Tenure</label>
+                                <label for="Single Eval Admin"><input type="radio" name="Role" id="Single Eval Admin" />16 Single Eval Admin</label>
+                                <label for="Demo Instructor"><input type="radio" name="Role" id="Demo Instructor" />17 Demo Instructor</label>
+                                <label for="Student"><input type="radio" name="Role" id="Student" />18 Student</label>
+                                <label for="Standards Admin"><input type="radio" name="Role" id="Standards Admin" />19 Standards Admin</label>
+                                <label for="Adjunct Advisor"><input type="radio" name="Role" id="Adjunct Advisor" />20 Adjunct Advisor</label>
+                            </div>
+                            <h4 style="display:flex; justify-content:center; margin:12px">Department Options:</h4>
+                            <div id="DepartmentListcheckboxes" style="width:300px; margin:auto; display:grid;overflow-y:scroll;height:185px;">
+                                <label for="ComputerScience"> <input type="radio" name="Department" id="ComputerScience" />ComputerScience</label>
+                                <label for="Math"><input type="radio" name="Department" id="Math" />Math</label>
+                                <label for="Physics"><input type="radio" name="Department" id="Physics" />Physics</label>
+                                <label for="Medical Lab Science"><input type="radio" name="Department" id="MedicalLabScience" />Medical Lab Science</label>
+                                <label for="Facilities Management"><input type="radio" name="Department" id="FacilitiesManagement" />Facilities Management</label>
+                                <label for="Library"><input type="radio" name="Department" id="Library" />Library</label>
+                                <label for="Economics"><input type="radio" name="Department" id="Economics" />Economics</label>
+                                <label for="Performing Arts"><input type="radio" name="Department" id="PerformingArts" />Performing Arts</label>
+                                <label for="Accounting Services"><input type="radio" name="Department" id="AccountingServices" />Accounting Services</label>
+                                <label for="Business Administration"><input type="radio" name="Department" id="BusinessAdministration" />Business Administration</label>
+                                <label for="Student Affairs"><input type="radio" name="Department" id="StudentAffairs" />Student Affairs</label>
+                                <label for="Nursing"><input type="radio" name="Department" id="Nursing" />Nursing</label>
+                                <label for="Network Mgmt Technology"><input type="radio" name="Department" id="NetworkMgmtTechnology" />Network Mgmt Technology</label>
+
+                            </div>
+                           </div>
+                        <div id="CenterColumn" style="float:left;width:10%">
+                            <div style="height:200px"></div>
+                            <button onclick="" class="addRemove" type="button">Add =></button>
+                            <button onclick="" class="addRemove" type="button"><= Remove</button>
                         </div>
-                        <span style="display:flex; justify-content:center; margin-top:10px">
-                            <input type="submit" value="Build Report" />
-                        </span>
-                    </form>
+                        <div id="RightColumn" style="float:right;width:45%">
+                            <h4 style="display:flex; justify-content:center;">-Professor Name's Permissions:</h4>
+                            <div class="RoleList">
+                                <div id="RoleListCheckboxes" style="width:300px; margin:auto; display:grid;overflow-y:auto;height:auto;max-height:420px">
+                                    <label for="Adj Coord ComputerScience"> <input type="checkbox" id="Adj Coord ComputerScience" />Adj Coord ComputerScience</label>
+                                    <label for="Adj Coord Math"><input type="checkbox" id="Adj Coord Math" />Adj Coord Math</label>
+                                    <label for="Adj Coord Physics"><input type="checkbox" id="Adj Coord Physics" />Adj Coord Physics</label>
+                                </div>
+                            </div>
+                        </div>
+</form>
                 </div>
                 <div class="accordion-separator"></div>
             </li>
