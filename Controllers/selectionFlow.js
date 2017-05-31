@@ -6,7 +6,7 @@ var courseOrInstructor = ""; //holds the string of "Course" or "Instructor" base
 var reportDisplayOption = "";
 
 // NOTE: This will need to be changed each semester to the path that the current group has set up for their API calls
-var apiPath = "https://icarus.cs.weber.edu/~nb06777/CS4450/v1/"; //This is the path to the API calls that interface with the database.
+var apiPath = "https://icarus.cs.weber.edu/~ck50991/CS4450/v1/"; //This is the path to the API calls that interface with the database.
 
 
 //This is used to keep track of what information the user is allowed access to.
