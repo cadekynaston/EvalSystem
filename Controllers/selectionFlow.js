@@ -6,7 +6,7 @@ var courseOrInstructor = ""; //holds the string of "Course" or "Instructor" base
 var reportDisplayOption = "";
 
 // NOTE: This will need to be changed each semester to the path that the current group has set up for their API calls
-var apiPath = "https://icarus.cs.weber.edu/~nb06777/CS4450/v1/"; //This is the path to the API calls that interface with the database.
+var apiPath = "https://icarus.cs.weber.edu/~ck50991/CS4450/v1/"; //This is the path to the API calls that interface with the database.
 
 
 //This is used to keep track of what information the user is allowed access to.
@@ -117,7 +117,7 @@ app.controller("InstructorCourseController", function($scope, $http) {
 
 
 
-		if(courseOrInstructor == "Course"){
+		if(courseOrInstructor == "Instructor"){
             document.getElementById("pane4-title").innerHTML = "Instructors";
 			let departmentsSelectedJSONString = "{";
 			departmentsSelectedJSONString += "\"departments\":" + JSON.stringify(departmentsSelected);
@@ -156,7 +156,7 @@ app.controller("InstructorCourseController", function($scope, $http) {
 				}
 			);
 		}
-		else if(courseOrInstructor == "Instructor"){
+		else if(courseOrInstructor == "Course"){
             document.getElementById("pane4-title").innerHTML = "Courses";
 			let departmentsSelectedJSONString = "{";
 			departmentsSelectedJSONString += "\"departments\":" + JSON.stringify(departmentsSelected);
@@ -176,6 +176,7 @@ app.controller("InstructorCourseController", function($scope, $http) {
 			.then(
 				function successCallback(response) {
 					console.log(response.data);
+					console.log('hi');
 					var courseNumbers = response.data;
 
 					// get the select we're going to add all our options to
@@ -259,10 +260,10 @@ function buildReport() {
 							courseListString += courses[i].value + ",";
 					}
 			}
-			
+
 			// seems to have issues in Edge, but we ran out of time
 			window.sessionStorage.coursesSelected = courseListString;
-			
+
 			window.location="pinGraph.html";
 			break;
 		default:
