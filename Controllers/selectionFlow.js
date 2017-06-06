@@ -21,6 +21,7 @@ var loggedInUserID = 887969243; // brad peterson
 app.controller("TermController", function($scope, $http) {
 	$http(
 		{
+
 			method: 'GET',
 			url:  apiPath + 'yearSemesters'
 		}
@@ -117,8 +118,8 @@ app.controller("InstructorCourseController", function($scope, $http) {
 
 
 
-		if(courseOrInstructor == "Course"){
-            document.getElementById("pane4-title").innerHTML = "Refine By Courses";
+		if(courseOrInstructor == "Instructor"){
+            document.getElementById("pane4-title").innerHTML = "Refine By Instructors";
 			let departmentsSelectedJSONString = "{";
 			departmentsSelectedJSONString += "\"departments\":" + JSON.stringify(departmentsSelected);
 			departmentsSelectedJSONString += ",\"userID\":" + loggedInUserID;
@@ -156,8 +157,8 @@ app.controller("InstructorCourseController", function($scope, $http) {
 				}
 			);
 		}
-		else if(courseOrInstructor == "Instructor"){
-            document.getElementById("pane4-title").innerHTML = "Refine By Instructors";
+		else if(courseOrInstructor == "Course"){
+            document.getElementById("pane4-title").innerHTML = "Refine By Courses";
 			let departmentsSelectedJSONString = "{";
 			departmentsSelectedJSONString += "\"departments\":" + JSON.stringify(departmentsSelected);
 			departmentsSelectedJSONString += "}";
