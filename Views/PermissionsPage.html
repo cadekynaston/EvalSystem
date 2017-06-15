@@ -19,14 +19,14 @@
                 <div class="accordion-content" ng-controller="FacultySelectController">
                     <h4 style="display:flex; justify-content:center; margin:auto">Select Faculty Member to Modify Permissions</h4>
                     <span style="display:flex; justify-content:center; margin-top:10px">
-                        <select id="facultyList" size="10" multiple>
-                            <!--<option ng-repeat="term in terms" value="{{Select.SemesterID}}">
-                                {{ Select.FirstName + " " + Select.LastName }}
-                            </option>-->
+                        <select id="facultyList" ng-model="FacultySelected" ng-change="showSelectValue(FacultySelected)" size="10" multiple>
+                            <option ng-repeat="fac in facs" value="{{fac.instructorID}}">
+                                {{fac.LastName + ", " + fac.FirstName}}
+                            </option>
                         </select>
                     </span>
                     <span style="display:flex; justify-content:center; margin-top:10px">
-                        <button name="select" onclick="getElementById('pane2-button').click()"">Next</button>
+                        <button name="select" ng-click="SelectFacultyMember" onclick="getElementById('pane2-button').click()">Next</button>
                         <!-- <button name="select" onclick="getElementById('pane2-button').click()">Next</button> -->
                     </span>
                 </div>
@@ -41,8 +41,8 @@
                     <form id="reportOptionForm" action="" method="POST" onsubmit="return buildReport()">
                         <div id="LeftColumn" style="float:left;width:45%">
                             <h4 style="display:flex; justify-content:center;">Permissions Options:</h4>
-                            <span style="display:flex; justify-content:center;margin-top:10px">
-                                <select id="permList" style="width:300px; margin:auto; display:grid;overflow-y:scroll;height:185px;" size="10">
+                            <span style="display:flex; justify-content:center;margin-top:10px" ng-controller="PermissionsListController">
+                                <select id="permList" ng-model="permListSelected" ng-change="showSelectValue(permListSelected)" style="width:300px; margin:auto; display:grid;overflow-y:scroll;height:185px;" size="10">
                                     <option value="Administrator">1 Administrator</option>
                                     <option value="Manager">2 Manager</option>
                                     <option value="Instructor">3 Instructor</option>
@@ -67,28 +67,30 @@
                             </span>
                             <h4 style="display:flex; justify-content:center; margin:auto">Departments Options:</h4>
                             <span style="display:flex; justify-content:center; margin-top:10px" ng-controller="DeptController">
-                                <select id="deptList" style="-webkit-appearance:listbox;width:300px;margin:auto;display:grid;overflow-y:scroll;height:185px;" size="10">
-                                    <option ng-repeat="dept in depts" value="{{ dept.DepartmentCode }}">
+                                <select id="deptList" ng-model="deptListSelected" ng-change="showSelectValue(deptListSelected)" style="-webkit-appearance:listbox;width:300px;margin:auto;display:grid;overflow-y:scroll;height:185px;" size="10">
+                                    <option ng-repeat="dept in depts" value="{{ dept.DepartmentName }}">
                                         {{ dept.DepartmentName }}
                                     </option>
                                 </select>
                             </span>
                            </div>
-                        <div id="CenterColumn" style="float:left;width:10%">
-                            <div style="height:194px"></div>
-                            <button onclick="" class="addRemove" type="button">Add <br />=></button>
-                            <div style="height:7px"></div>
-                            <button onclick="" class="addRemove" type="button"><=<br /> Remove</button>
-                        </div>
-                        <div id="RightColumn" style="float:right;width:45%">
-                            <h4 style="display:flex; justify-content:center;">-Professor Name's Permissions:</h4>
-                            <span style="display:flex; justify-content:center; margin-top:10px" ng-controller="RoleController">
-                                <select id="roleList" style="-webkit-appearance:listbox;width:300px;margin:auto;display:grid;overflow-y:scroll;height:400px;" size="25">
-                                    <!--<option ng-repeat="role in roles" value="{{ role.value }}">
-                                        {{ role.value }}
-                                    </option>-->
-                                </select>
-                            </span>
+                        <div ng-controller="RoleController">
+                            <div  id="CenterColumn" style="float:left;width:10%">
+                                <div style="height:194px"></div>
+                                <button ng-click="AddRole()" class="addRemove" type="button">Add <br />=></button>
+                                <div style="height:7px"></div>
+                                <button ng-click="RemoveRole()" class="addRemove" type="button"><=<br /> Remove</button>
+                            </div>
+                            <div id="RightColumn" style="float:right;width:45%">
+                                <h4 id="FacultyNameHeader" style="display:flex; justify-content:center;">Please select a faculty member</h4>
+                                <span style="display:flex; justify-content:center; margin-top:10px" >
+                                    <select id="roleList" ng-model="roleListSelected" ng-change="showSelectValue(roleListSelected)" style="-webkit-appearance:listbox;width:300px;margin:auto;display:grid;overflow-y:scroll;height:400px;" size="25">
+                                        <option ng-repeat="role in roles" value="{{ role.RoleId }}">
+                                            {{role.RoleDepartment + " - " + role.RolePermission }}
+                                        </option>
+                                    </select>
+                                </span>
+                            </div>
                         </div>
 </form>
                 </div>
