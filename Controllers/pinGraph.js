@@ -26,7 +26,7 @@ console.log(`
 			"courses" : ["CS2420","CS1400"],
 			"userID": 887969243
 		}
-		
+
 	will return all of the pingraph data for Brad Peterson to see
 	regarding these CS1400 and CS2420
 
@@ -42,10 +42,10 @@ console.log(`
 		{"TestId":"69210","teacher":"Bradley Peterson","course":"CS2420","catalogYear":"2013","calendarYear":"2014","semester":"Summer","semesterNumber":"2","Score":"3.714285","permission":"2","bannerCRN":"20949","LikertMin":"0","LikertMax":"4"},
 		{"TestId":"69210","teacher":"Bradley Peterson","course":"CS2420","catalogYear":"2014","calendarYear":"2015","semester":"Summer","semesterNumber":"2","Score":"3.830449","permission":"2","bannerCRN":"21584","LikertMin":"0","LikertMax":"4"}
 	]
-	
-	
-	
-	At the moment it generates a bunch of random data in a for loop.  
+
+
+
+	At the moment it generates a bunch of random data in a for loop.
 	The attempted AJAX call is commented out.
 `);
 
@@ -99,6 +99,79 @@ function getColorZIndex(color)
 function startGraph()
 {
 	if(coursesToDisplay){
+
+		$.ajax({
+    type: "POST",
+    url: "http://icarus.cs.weber.edu/~ck50991/CS4450/v1/pingraphData",
+    data: JSON.stringify({
+		  	"courseList": [
+		    	{"course":"CS1400"},
+		    	{"course":"CS2420"},
+		    	{"course":"CS1410"},
+		    	{"course":"CS3750"}
+		    ],
+		    "userID":887969243
+		}),
+		dataType: "json",
+
+    success: function(data){
+			console.log(data);
+			for (var i = 0; i < data.length; i++)
+			{
+
+				var tempMarker;
+				var tempColor = (Math.random() * 50).toFixed(0);
+				var course = data[i].course;
+				var instructor = data[i].teacher;
+				var score = parseFloat(data[i].Score);
+				console.log(score)
+				if (data[i].course == "") {course = 'Missing';}
+				if (data[i].teacher == "") {instructor = 'Missing';}
+
+
+				if (tempColor == 0)
+				{
+					tempMarker = "red";
+				}
+				else if (tempColor == 1)
+				{
+					tempMarker = "green";
+				}
+				else if (tempColor >= 2)
+				{
+					tempMarker = "blue";
+				}
+
+
+				//assign info to an object with mock data
+				var tempObject = {
+					marker:tempMarker,
+					course:course,
+					instructor:instructor,
+					score:score,
+					year:data[i].calendarYear,
+					semester: data[i].semester};
+
+				graphObjectArray.push(tempObject);
+			}
+
+		 graphObjectArray.sort(function (a, b) {
+			 return a.score - b.score
+		 })
+
+		 console.log(graphObjectArray)
+		 tableData = graphObjectArray;
+		 barGraph();
+
+		 generateScoreTable(tableData);
+
+
+		},
+    failure: function(errMsg) {
+			alert('oops')
+        alert(errMsg);
+    }
+});
 		//$.ajax(
 		//{
 		//    //url: '/misc/weber/CSEvals/ranking.cfm',
@@ -133,50 +206,14 @@ function startGraph()
 		//});
 
 		//var graphObjectArray = new Array();//[graphObject, graphObject2, graphObject3, graphObject4, graphObject5, graphObject6, graphObject7, graphObject8, graphObject9];
-		
-		//generate random markers to use as mock data. 
-		 for (var i = 0; i < 200; i++)
-		 {
-			 var tempScore = (Math.random() * 4);
-			 var tempMarker;
-			
-			 var tempColor = (Math.random() * 50).toFixed(0);
 
-			 var semester = Math.floor((Math.random() * 3)) + 1;
-			 var year = Math.floor((Math.random() * 5)) + 2013;
-			
-			 if (tempColor == 0)
-			 {
-				 tempMarker = "red";
-			 }
-			 else if (tempColor == 1)
-			 {
-				 tempMarker = "green";
-			 }
-			 else if (tempColor >= 2)
-			 {
-				 tempMarker = "blue";
-			 }
-			
-
-			 //assign info to an object with mock data
-			 var tempObject = {marker:tempMarker, course:"CS 1400", instructor:"Brad Peterson", score:tempScore, year:year, semester: semester};
-			 graphObjectArray.push(tempObject);
-		 }
-		
-		graphObjectArray.sort(function (a, b) {
-			return a.score - b.score
-		})
-		tableData = graphObjectArray;
-		barGraph();
-
-		generateScoreTable(tableData);
+		//generate random markers to use as mock data.
 	}
-	
+
 	else{
 		console.log("You did not come to this page via the selectionFlow.html page.  Please go back and do this properly.");
 	}
-	
+
 
 }
 
@@ -185,8 +222,8 @@ function barGraph()
 {
 
 	//MAIN TABLE AND FIRST SELECTION OF DATA
-	createResults();	
-	
+	createResults();
+
 }
 //Function that puts the graph results on the bar graph
 function createResults()
@@ -196,19 +233,19 @@ function createResults()
     //html += "<tr id = 'mainrow' align = 'center'><td colspan = '9' width = '900px' >";
     html += "<td colspan = '9' width = '900px' >";
     html += "<img src='../Images/blackbar.png' style='padding-left: 7px;' height = '55%' width='100%' id='graphimage'>";
-	
+
 	var startIndex = 0;	//START THE NUMBER LINE
 
 	html += "<div id='graphData' style = 'position:relative;'>";
 
 	var top = -99;
 	var zindex = 15;
-	
+
 	for (var i = leftBound; i <= rightBound; i = i + .5)
 	{
 	    html += "<img style='position: absolute; z-index: " + zindex + "; left:" + (((((i - leftBound) * 225) / 900) * 100) * (4 / (rightBound - leftBound))) + "%; top: " + (top + 40) + "px;' src = '../Images/blacktick.png'>";
 	}
-	
+
 	html += "</div></td>";
 
 
@@ -225,7 +262,7 @@ function createResults()
 
 		if (i != 0)
 		{
-		    
+
 
 
 		    if (graphObjectArray[i - 1]["score"] == graphObjectArray[i]["score"])
@@ -261,7 +298,7 @@ function createResults()
 		            semester = "Spring";
 		            break;
 		    }
-		    
+
 
 		}
 
@@ -279,7 +316,7 @@ function createResults()
 
 			        graphData.innerHTML += "<img style='position: absolute; z-index: " + zindex + "; left:" + (((((graphObjectArray[i]["score"] - leftBound) * 225) / 900) * 100) * (4 / (rightBound - leftBound))) + "%; top: " + top + "px;'  title='" + graphObjectArray[i]["instructor"] + " - " + graphObjectArray[i]["course"] + ": " + graphObjectArray[i]["score"] + "' src = '../Images/RedPinSmall.png'>";
 			    }
-			    
+
 			}
 			else if (graphObjectArray[i]["marker"] == "green")
 			{
@@ -291,7 +328,7 @@ function createResults()
 			    {
 			        graphData.innerHTML += "<img style='position: absolute; z-index: " + zindex + "; left:" + (((((graphObjectArray[i]["score"] - leftBound) * 225) / 900) * 100) * (4 / (rightBound - leftBound))) + "%; top: " + top + "px;'  title='" + graphObjectArray[i]["instructor"] + " - " + graphObjectArray[i]["course"] + ": " + graphObjectArray[i]["score"] + "' src = '../Images/GreenPinSmall.png'>";
 			    }
-			    
+
 			}
 			else if (graphObjectArray[i]["marker"] == "blue")
 			{
@@ -303,27 +340,27 @@ function createResults()
 			    {
 			        graphData.innerHTML += "<img style='position: absolute; z-index: " + zindex + "; left:" + (((((graphObjectArray[i]["score"] - leftBound) * 225) / 900) * 100) * (4 / (rightBound - leftBound))) + "%; top: " + top + "px;'  title='" + graphObjectArray[i]["instructor"] + " - " + graphObjectArray[i]["course"] + ": " + graphObjectArray[i]["score"] + "' src = '../Images/BluePinSmall.png'>";
 			    }
-			    
+
 			}
 		}
 	}
-	
+
 	var top2 = -103;
-	
+
 	//CALCULATE AND POSITION LEFTMOST DATAPOINT ("LOW")
 	if (graphObjectArray[0]["score"] >= leftBound && graphObjectArray[0]["score"] <= rightBound)
 	{
 	    graphData.innerHTML += "<img style='position: absolute;	left:" + (((((graphObjectArray[0]["score"] - leftBound) * 225) / 900) * 100) * (4 / (rightBound - leftBound))) + "%; top:" + (top2 + 70) + "px;'  title='Low Score' src = '../Images/PointPinSmall.png'>";
 	    graphData.innerHTML += "<div id = 'lowLabel' style='position: absolute; left:" + ((((((graphObjectArray[0]["score"] - leftBound) * 225) / 900) * 100) * (4 / (rightBound - leftBound))) - (2.5)) + "%; top:" + (top2 + 140) + "px;'>Low</div>";
 	}
-		
+
 	//CALCULATE AND POSITION RIGHTMOST DATAPOINT ("HIGH")
 	if (graphObjectArray[graphObjectArray.length - 1]["score"] >= leftBound && graphObjectArray[graphObjectArray.length - 1]["score"] <= rightBound)
 	{
 	    graphData.innerHTML += "<img style='position: absolute;	left:" + (((((graphObjectArray[graphObjectArray.length - 1]["score"] - leftBound) * 225) / 900) * 100) * (4 / (rightBound - leftBound))) + "%; top:" + (top2 + 70) + "px;'  title='High Score' src = '../Images/PointPinSmall.png'>";
 	    graphData.innerHTML += "<div id = 'highLabel' style='position: absolute; left:" + (((((graphObjectArray[graphObjectArray.length - 1]["score"] - leftBound) * 225) / 900) * 100) * (4 / (rightBound - leftBound)) + (1.0)) + "%; top:" + (top2 + 140) + "px;'>High</div>";
 	}
-		
+
 	//CALCULATE AND POSITION MIDDLEMOST DATAPOINT ("MEDIAN")
 	var median = 0.0;
 	if (graphObjectArray.length %2 == 0)
@@ -334,7 +371,7 @@ function createResults()
 	{
 		median = graphObjectArray[parseInt((graphObjectArray.length / 2) - .5)]["score"];
 	}
-	
+
 	if (median >= leftBound && median <= rightBound)
 	{
 	    graphData.innerHTML += "<img id = 'medImage' style='position: absolute;	left:" + (((((median - leftBound) * 225) / 900) * 100) * (4 / (rightBound - leftBound))) + "%; top:" + (top2 + 70) + "px;'  title='Median' src = '../Images/PointPinSmall.png'>";
@@ -343,7 +380,7 @@ function createResults()
 		else
 		    graphData.innerHTML += "<div style='position: absolute; left:" + (((((median * 225) / 900) * 100) * (4 / (rightBound - leftBound))) - 1.7) + "%; top:" + (top2 + 140) + "px; text-align:center'>Median</div>";
 	}
-	
+
 	//GENERATE NUMBER LINE
 	for (var i = leftBound; i <= rightBound ; i = i + .5)
 	{
@@ -460,30 +497,30 @@ function endZoomIn()
 
 function regenerate()
 {
-	
+
 	var newChart = "";
-	
+
 	newChart += ""
-	
+
 	newChart += "<tr align = 'center'><td colspan = '9' width = '900px' >";
 
 	newChart += "<img src='../Images/blackbar.png' style='padding-left: 7px;' height = '55%' width='100%' id='graphimage2'>";
-	
+
 	//var tablePos = document.getElementById('graphimage2');
-	
+
 	var startIndex = 0;	//START THE NUMBER LINE
 
 	newChart += "<div style = 'position:relative;'>";
 		var top = -99;
 		var zindex = 15;
-	
-	
+
+
 	for (var i = leftScale; i <= rightScale ; i = i + .5)
 	{
 		if (i >= leftBound && i <= rightBound)
 			newChart += "<img style='position: absolute; z-index: " + zindex + "; left:" + (((((i - leftBound) * 225) / 900) * 100) * (4 / (rightBound - leftBound))) + "%; top: " + (top + 40) + "px;' src = '../Images/blacktick.png'>";
 	}
-	
+
 	for(i = 0; i < graphObjectArray.length; i++)
 	{
 	    var color = graphObjectArray[i].marker;
@@ -537,7 +574,7 @@ function regenerate()
 			    else {
 			        newChart += "<img style='position: absolute; z-index: " + zindex + "; left:" + (((((graphObjectArray[i]["score"] - leftBound) * 225) / 900) * 100) * (4 / (rightBound - leftBound))) + "%; top: " + top + "px;'  title='" + graphObjectArray[i]["instructor"] + " - " + graphObjectArray[i]["course"] + ": " + graphObjectArray[i]["score"] + "' src = '../Images/RedPinSmall.png'>";
 			    }
-				
+
 			}
 			else if (graphObjectArray[i]["marker"] == "green")
 			{
@@ -549,7 +586,7 @@ function regenerate()
 			    {
 			        newChart += "<img style='position: absolute; z-index: " + zindex + "; left:" + (((((graphObjectArray[i]["score"] - leftBound) * 225) / 900) * 100) * (4 / (rightBound - leftBound))) + "%; top: " + top + "px;'  title='" + graphObjectArray[i]["instructor"] + " - " + graphObjectArray[i]["course"] + ": " + graphObjectArray[i]["score"] + "' src = '../Images/GreenPinSmall.png'>";
 			    }
-				
+
 			}
 			else if (graphObjectArray[i]["marker"] == "blue")
 			{
@@ -560,28 +597,28 @@ function regenerate()
 			    else {
 			        newChart += "<img style='position: absolute; z-index: " + zindex + "; left:" + (((((graphObjectArray[i]["score"] - leftBound) * 225) / 900) * 100) * (4 / (rightBound - leftBound))) + "%; top: " + top + "px;'  title='" + graphObjectArray[i]["instructor"] + " - " + graphObjectArray[i]["course"] + ": " + graphObjectArray[i]["score"] + "' src = '../Images/BluePinSmall.png'>";
 			    }
-				
+
 			}
 		}
 	}
 
-	
+
 	var top2 = -103;
-	
+
 	//CALCULATE AND POSITION LEFTMOST DATAPOINT ("LOW")
 	if (graphObjectArray[0]["score"] >= leftBound && graphObjectArray[0]["score"] <= rightBound)
 	{
 		newChart+="<img style='position: absolute;	left:" + (((((graphObjectArray[0]["score"] - leftBound) * 225) / 900) * 100) * (4 / (rightBound - leftBound))) + "%; top:" + (top2 + 70) + "px;'  title='Low Score' src = '../Images/PointPinSmall.png'>";
 		newChart+="<div id = 'lowLabel' style='position: absolute; left:" + ((((((graphObjectArray[0]["score"] - leftBound) * 225) / 900) * 100) * (4 / (rightBound - leftBound))) - (2.5)) +  "%; top:" + (top2 + 140) + "px;'>Low</div>";
 	}
-		
+
 	//CALCULATE AND POSITION RIGHTMOST DATAPOINT ("HIGH")
 	if (graphObjectArray[graphObjectArray.length - 1]["score"] >= leftBound && graphObjectArray[graphObjectArray.length - 1]["score"] <= rightBound)
 	{
 		newChart+="<img style='position: absolute;	left:"  + (((((graphObjectArray[graphObjectArray.length - 1]["score"] - leftBound) * 225) / 900) * 100) * (4 / (rightBound - leftBound)))+ "%; top:" + (top2 + 70) + "px;'  title='High Score' src = '../Images/PointPinSmall.png'>";
 		newChart+="<div id = 'highLabel' style='position: absolute; left:"  + (((((graphObjectArray[graphObjectArray.length - 1]["score"] - leftBound) * 225) / 900) * 100) * (4 / (rightBound - leftBound)) + (1.0)) + "%; top:" + (top2 + 140) + "px;'>High</div>";
 	}
-		
+
 	//CALCULATE AND POSITION MIDDLEMOST DATAPOINT ("MEDIAN")
 	var median = 0.0;
 	if (graphObjectArray.length %2 == 0)
@@ -592,26 +629,26 @@ function regenerate()
 	{
 		median = graphObjectArray[parseInt((graphObjectArray.length / 2) - .5)]["score"];
 	}
-	
-	
+
+
 	if (median >= leftBound && median <= rightBound)
 	{
 		newChart+="<img id = 'medImage' style='position: absolute;	left:" + (((((median - leftBound) * 225) / 900) * 100) * (4 / (rightBound - leftBound))) + "%; top:" + (top2 + 70) + "px;'  title='Median' src = '../Images/PointPinSmall.png'>";
 		newChart+="<div style='position: absolute; left:" + ((((((median - leftBound) * 225) / 900) * 100) * (4 / (rightBound - leftBound))) - 1.7) + "%; top:" + (top2 + 140) + "px; text-align:center'>Median</div>";
 	}
-	
 
-	
+
+
 	for (var i = leftScale; i <= rightScale ; i = i + .5)
 	{
 		if (i >= leftBound && i <= rightBound)
 			newChart+="<div style = 'position: absolute; top:0px; left:" + (((((i - leftBound) * 225) / 900) * 100) * (4 / (rightBound - leftBound))) + "%;'>" + nearestHalf(startIndex + i).toFixed(1) + "</div>";
 	}
-	
-	
+
+
 	return newChart;
-	
-}	
+
+}
 
 
 function nearestHalf(value)
@@ -625,14 +662,14 @@ function generateScoreTable(scoreArray)
 {
     var table = document.getElementById('tabularScores');
     table.innerHTML = "";
-    
+
 
     if(!table)
     {
         return;
     }
 
-    
+
     var html = "";
 
     html += "<tr>";
@@ -674,7 +711,7 @@ function generateScoreTable(scoreArray)
 
 
     table.innerHTML += html;
-        
+
 }
 
 function sortScore()
@@ -707,7 +744,7 @@ function sortSemester()
 
     tableData.sort(function (a, b) {
 
-       
+
         return parseInt("" + a.year + a.semester) - parseInt("" + b.year + b.semester);
     });
 
@@ -724,7 +761,7 @@ function sortClassName()
             return 1;
         else
             return 0;
-        
+
     });
     generateScoreTable(tableData);
 }
