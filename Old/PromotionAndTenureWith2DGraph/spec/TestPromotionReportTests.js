@@ -5,7 +5,7 @@ describe("Test Promotion Report ", function() {
   });
   describe("To Key Value Pair ", function() {
 
-    var jsonpData = '{\"COLUMNS\":[\"CLASSSTRING\",\"BANNERCRN\",\"SECTION\",\"SEMESTER\",\"SEMESTERSTRING\",\"BLOCK\",\"YEAR\",\"SUBJECTCODE\",\"COURSENUMBER\",\"INSTRUCTORID\",\"FIRSTNAME\",\"LASTNAME\",\"EMAIL\",\"RESPONSES\",\"STUDENTS\",\"TESTID\",\"TESTNAME\"],\"DATA\":[[\"CS2420\",22574,null,2,\"Fall\",null,2015,\"CS\",2420,887969243,\"Bradley\",\"Peterson\",\"b_peterson@yahoo.com\",289,17,69210,\"Eval Dept of CS\"]]}';
+    var jsonpData = '{\"COLUMNS\ " : [\" CLASSSTRING\",\"BANNERCRN\",\"SECTION\",\"SEMESTER\",\"SEMESTERSTRING\",\"BLOCK\",\"YEAR\",\"SUBJECTCODE\",\"COURSENUMBER\",\"INSTRUCTORID\",\"FIRSTNAME\",\"LASTNAME\",\"EMAIL\",\"RESPONSES\",\"STUDENTS\",\"TESTID\",\"TESTNAME\"],\"DATA\ " : [[\" CS2420\",22574,null,2,\"Fall\",null,2015,\"CS\",2420,887969243,\"Bradley\",\"Peterson\",\"b_peterson@yahoo.com\",289,17,69210,\"Eval Dept of CS\"]]}';
 
     it("Banner CRN to be 22574", function() {
       var data = JSON.parse(jsonpData);

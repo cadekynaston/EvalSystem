@@ -98,7 +98,7 @@ var Report = (function() {
 
 	console.log("testing");
 	
-      var data = JSON.parse('{"COLUMNS":["SECTIONID","SEMESTER","YEAR","BANNERCRN"],"DATA":[[192511,3,2013,30611],[194320,3,2013,33035],[194334,3,2013,33045],[194386,3,2013,33108],[195899,3,2013,34455],[197540,1,2014,10639],[197547,1,2014,10669],[197562,1,2014,10641],[198536,2,2014,20949],[201578,2,2014,23750],[201580,2,2014,23768],[201601,2,2014,23793],[204884,3,2014,31151],[206605,3,2014,32940],[206638,3,2014,32962],[206657,3,2014,32945],[211219,1,2015,11197],[211220,1,2015,11198],[211336,1,2015,11232],[211592,2,2015,21584],[212676,2,2015,22599],[212796,2,2015,22564],[212797,2,2015,22574],[219457,3,2015,33274],[219622,3,2015,33296],[219655,3,2015,33269]]}');
+      var data = JSON.parse('{"COLUMNS":["SECTIONID","SEMESTER","YEAR","BANNERCRN"], "DATA":[[192511,3,2013,30611]]}');
 
       crnArray = [];
       if (data.DATA.length == 0) {
@@ -412,16 +412,18 @@ var Report = (function() {
 
       //url: '/misc/weber/CSEvals/CrnDetails.cfm?crn='+crn+'&semester='+semester+'&year='+year,
       var CrnDetailsUrl = IsRunningInTest ? TEST_URL + "CrnDetails.cfm" : "CrnDetails.cfm";
-
+      console.log('hello, before ajax call');
         $.ajax(
     	{
     	    url: CrnDetailsUrl + '?crn=' + crn + '&semester=' + semester + '&year=' + year,
-    	    type: "GET",
-    	    dataType: "jsonp",
-          jsonpCallback: 'callback',
+    	    type: 'GET',
+    	    dataType: 'jsonp',
+            jsonpCallback: 'callback',
     	    success: function (data) {
+                console.log('callback success:.', data);
             data = JSON.parse(data);
     	        try {
+                    console.log('made it to try');
     	            if (currentElement != element) {
     	                return;
     	            }
@@ -435,7 +437,7 @@ var Report = (function() {
     	            }
     	            else				//RETREIVE AND UTILIZE TITLE DATA
     	            {
-
+                        console.log('else in titleQuery');
     	                $.each(data.DATA, function (i, array) {
     	                    var dataArray = toKeyValPair(data.COLUMNS, String(array).split(','));	//CONVERTS DATA TO A KEY VALUE PAIR FOR READABILITY
     	                    element.semesterName = dataArray['SEMESTERSTRING'];
@@ -455,10 +457,12 @@ var Report = (function() {
     	            titleQueryComplete(element, true);
     	        }
     	        catch (thrownError) {
+                    console.log('made it to catch');
     	            titleQueryComplete(element, false);
     	        }
     	    },
     	    error: function (xhr, ajaxOptions, thrownError) {
+                console.log('error in ajax of titleQuery', thrownError);
     	        if (currentElement != element) {
     	            return;
     	        }
@@ -467,6 +471,7 @@ var Report = (function() {
     	});
     }
 
+    console.log('made it above topQuery');
     function topQuery(element, crn, semester, year) {
         $(element).find("#StatisticsWrapper").hide();
 
@@ -526,6 +531,7 @@ var Report = (function() {
                 detailsTop(element, crn, semester, year, tpButton);
             }
             catch (error) {
+                console.log('error in topQuery');
                 topQueryComplete(element, false);
             }
 
@@ -1137,14 +1143,17 @@ var Report = (function() {
 
         if (!passed) {
             //execute failed event
+            console.log('Failed');
             onErrorQueries(wrapperElement);
         }
         if (failedQueries(wrapperElement)) {
+            console.log('failed q');
             nextCrn();
             return;
         }
         wrapperElement["TITLEQUERY"] = passed;
         if (checkCompletedAllQueries(wrapperElement)) {
+            console.log('Passed');
             //advance to next crn
             nextCrn();
         }
@@ -1174,6 +1183,7 @@ var Report = (function() {
         mainQuery(element, CRN, Semester, Year);
         essayQuery(element, CRN, Semester, Year);
         topQuery(element, CRN, Semester, Year);
+        console.log('add to report');
 
 
         //add footer that adds a page break for css

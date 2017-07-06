@@ -246,6 +246,24 @@ function buildReport() {
 			break;
 		case "allReports":
 			console.log("You chose All as Eval Reports.")
+			//////////////////////////////////////////////////////////////////////////replace all below
+			var courseListString = "";
+			var courses = document.getElementById("ICList").options;
+
+			// strip out the information we need to get objects in the form of
+			// {code: 8001, name: Computer Science}
+
+			for(var i=0; i<courses.length; i++){
+					if(courses[i].selected){
+							courseListString += courses[i].value + ",";
+					}
+			}
+			
+			// seems to have issues in Edge, but we ran out of time
+			window.sessionStorage.coursesSelected = courseListString;
+			
+			window.location="Class_Breakdown.html";
+			////////////////////////////////////////////////////////////////////////replace all above
 			break;
 		case "oneReport":
 			console.log("You chose All in One Report.")

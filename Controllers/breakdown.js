@@ -407,7 +407,7 @@ function detailsTop(element, crn, semester, year, clickedButton) {
         return;
     }
     originalDiv.addClass("Already_Expanded");
-    $(element).find("#top_detail").before('<p class="loadinggif">Calculating...</p></br><img class="loadinggif" src=".\\images\\ajax-loader.gif" "/>');
+    $(element).find("#top_detail").before('<p class="loadinggif">Calculating...</p></br><img class="loadinggif" src="..\\images\\ajax-loader.gif" />');
     //jQuery.get('/misc/weber/CSEvals/CrnStatistics.cfm?crn='+crn+'&semester='+semester+'&year='+year, function(data) 
     jQuery.get('CrnStatistics.cshtml?crn=' + crn + '&semester=' + semester + '&year=' + year, function (data) {
         if (currentElement != element) {
@@ -572,8 +572,8 @@ function detailsQuery(element, crn, semester, year, questionId, clickedButton) {
 
     originalDiv.addClass("Already_Expanded");
     originalDiv.hide();
-    expanderDiv.before('<span class="loadinggif">Calculating...</span><img class="loadinggif" src=".\\images\\ajax-loader.gif" "/>');
-    //expanderDiv.show('<img class="loadinggif" src=".\\images\\ajax-loader.gif" "/>');
+    expanderDiv.before('<span class="loadinggif">Calculating...</span><img class="loadinggif" src="..\\images\\ajax-loader.gif" />');
+    //expanderDiv.show('<img class="loadinggif" src="..\\images\\ajax-loader.gif" "/>');
 
 
     $.ajax(
@@ -875,7 +875,7 @@ function nextCrn() {
     if (currentCRNIndex < crnArray.length) {
         addToReport(crnArray[currentCRNIndex][0], crnArray[currentCRNIndex][1], crnArray[currentCRNIndex][2]);
         currentCRNIndex++;
-        $('#loadingstatus').get(0).innerHTML = '<p class="loadinggif">' + currentCRNIndex + ' of ' + crnArray.length + ' classes</p></br><img class="loadinggif" src=".\\images\\ajax-loader.gif" "/>';
+        $('#loadingstatus').get(0).innerHTML = '<p class="loadinggif">' + currentCRNIndex + ' of ' + crnArray.length + ' classes</p></br><img class="loadinggif" src="..\\images\\ajax-loader.gif" />';
 
     }
         // we completed it so turn off the loading status div
@@ -1022,7 +1022,7 @@ function addToReport(CRN, Semester, Year) {
     $(element).delegate(".button", "click", function () { detailsQuery(element, CRN, Semester, Year, $(this).siblings(".hiddenQuestionID").val(), this); });
     $(element).delegate(".tpbutton", "click", function () { detailsTop(element, CRN, Semester, Year, this); });
 
-    $(element).find("#StatisticsWrapper").before('<p class="loadinggif">Calculating...</p></br><img class="loadinggif" src=".\\images\\ajax-loader.gif" "/>');
+    $(element).find("#StatisticsWrapper").before('<p class="loadinggif">Calculating...</p></br><img class="loadinggif" src="..\\images\\ajax-loader.gif" />');
     titleQuery(element, CRN, Semester, Year);
     mainQuery(element, CRN, Semester, Year);
     essayQuery(element, CRN, Semester, Year);
@@ -1099,7 +1099,7 @@ function loadCRNData(crnArray) {
 
     var loadingStatus = document.createElement('div');
     loadingStatus.id = "loadingstatus";
-    loadingStatus.innerHTML = '<p class="loadinggif">0 of ' + crnArray.length + ' classes</p></br><img class="loadinggif" src=".\\images\\ajax-loader.gif" "/>';
+    loadingStatus.innerHTML = '<p class="loadinggif">0 of ' + crnArray.length + ' classes</p></br><img class="loadinggif" src="..\\images\\ajax-loader.gif" />';
     document.body.appendChild(loadingStatus);
     nextCrn();
 }
