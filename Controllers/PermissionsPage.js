@@ -15,11 +15,6 @@ var indexSelected = 0;
 // NOTE: This will need to be changed each semester to the path that the current group has set up for their API calls
 var apiPath = "https://icarus.cs.weber.edu/~ck50991/CS4450/v1/"; //This is the path to the API calls that interface with the database.
 
-
-//This is used to keep track of what information the user is allowed access to.
-// i.e. If the user is a adjunct admin, they should see the results from the adjuncts but only from within their department
-var loggedInUserID = 887969243; // brad peterson
-
 app.controller("FacultySelectController", function ($scope, $http) {
     $http(
         {
@@ -33,18 +28,7 @@ app.controller("FacultySelectController", function ($scope, $http) {
            
             FacultyList = response.data;
             $scope.facs = response.data;
-            console.log(FacultyList);
-            // get the select we're going to add all our options to
-            //var select = document.getElementById("facultyList");
-
-            // remove any existing options (for repeated use)
-            //select.options.length = 0;
-
-            // add all our new ones
-            //for (var i = 0; i < instructors.length; i++) {
-            //    // new Option (text, value)
-            //    //select.options[select.options.length] = new Option(instructors[i].LastName + ", " + instructors[i].FirstName);
-            //}
+            console.log(FacultyList);            
         },
         function errorCallback(response) {
             console.log(response);
@@ -67,27 +51,10 @@ app.controller("FacultySelectController", function ($scope, $http) {
 });
 
 app.controller("RoleController", function ($scope, $http) {
-
-    //$http(
-    //    {
-    //        method: 'GET',
-    //        url: apiPath + 'roles'
-    //    }
-    //)
-    //    .then(
-    //    function successCallback(response) {
-    //        console.log(response.data); //outputs the received data to the console (for debugging purposes only)
-    //        $scope.Roles = response.data;
-    //    },
-    //    function errorCallback(response) {
-    //        console.log(response);
-    //    }
-    //    );
+        
     $scope.buildRoleList = function () {
         var Roles = document.getElementById("roleList").options;
 
-        // strip out the information we need to get objects in the form of
-        // {Dempartment - Role}
         rolesSelected.length = 0;
         for (var i = 0; i < Roles.length; i++) {
             if (Roles[i].selected) {
@@ -98,13 +65,7 @@ app.controller("RoleController", function ($scope, $http) {
                 });
             }
         }
-    }
-
-    //$scope.SelectFacultyMember = function () {
-    //    var Roles = document.getElementById("roleList").options;
-    //    SelectedFaculty = "";
-    //    SelectedFacultyID = "";
-    //}
+    }  
 
     // on click add role
     $scope.AddRole = function () {        
@@ -123,6 +84,9 @@ app.controller("RoleController", function ($scope, $http) {
     $scope.RemoveRole = function () {
         console.log("Remove Role Clicked");
         rolesSelected.splice(indexSelected, 1); 
+        console.log(rolesSelected);
+        $scope.roles = [];
+        $scope.roles = rolesSelected;        
     }
     
     // change in role selected
@@ -147,8 +111,9 @@ app.controller("DeptController", function ($scope, $http) {
     )
         .then(
         function successCallback(response) {
-            console.log(response.data); //outputs the received data to the console (for debugging purposes only)
+            console.log(response.data); 
             $scope.depts = response.data;
+            $scope.deptListSelected = $scope.depts[0].DepartmentName;//Selects the first entry automatically to prevent blank entry from appearing
         },
         function errorCallback(response) {
             console.log(response);
@@ -179,6 +144,7 @@ app.controller("DeptController", function ($scope, $http) {
 });
 
 app.controller("PermissionsListController", function ($scope) {
+    //$scope.permListSelected = document.getElementById("permList").options[0].text;//Selects the first entry automatically to prevent blank entry from appearing
     $scope.showSelectValue = function (permListSelected) {
         console.log(permListSelected);
         tempPermSelected = permListSelected;
