@@ -1,4 +1,5 @@
 ﻿
+var urlStart = 'https://chitester1dev.weber.edu:6838/misc/weber/CSEvals'
 
 
 function getPixelLength(score) {
@@ -50,7 +51,8 @@ function getAnswerLength(answerCount, currentTotal) {
 //ESSAY QUERY FUNCTION*************************************************************************************************************************************************
 function essayQuery(element, crn, semester, year) {
     //jQuery.getJSON('/misc/weber/CSEvals/essayAnswers.cfm?crn='+crn+'&semester='+semester+'&year='+year, function(data) 
-    jQuery.getJSON('EssayAnswers.cshtml?crn=' + crn + '&semester=' + semester + '&year=' + year, function (data) {
+    jQuery.getJSON(urlStart + '/EssayAnswers.cfm?crn=' + crn + '&semester=' + semester + '&year=' + year, function (data) {
+		console.log(data);
         if (currentElement != element) {
             return;
         }
@@ -105,10 +107,11 @@ function mainQuery(element, crn, semester, year) {
     $.ajax(
 	{
 	    //url: '/misc/weber/CSEvals/AnswerCount.cfm?crn='+crn+'&semester='+semester+'&year='+year,
-	    url: 'AnswerCount.cshtml?crn=' + crn + '&semester=' + semester + '&year=' + year,
+	    url: urlStart + '/AnswerCount.cfm?crn=' + crn + '&semester=' + semester + '&year=' + year,
 	    type: "GET",
 	    dataType: "json",
 	    success: function (data) {
+			console.log(data);
 	        if (currentElement != element) {
 	            return;
 	        }
@@ -269,10 +272,11 @@ function titleQuery(element, crn, semester, year) {
     $.ajax(
 	{
 	    //url: '/misc/weber/CSEvals/CrnDetails.cfm?crn='+crn+'&semester='+semester+'&year='+year,
-	    url: 'CrnDetails.cshtml?crn=' + crn + '&semester=' + semester + '&year=' + year,
+	    url: urlStart + '/CrnDetails.cfm?crn=' + crn + '&semester=' + semester + '&year=' + year,
 	    type: "GET",
 	    dataType: "json",
 	    success: function (data) {
+			console.log(data);
 	        try {
 	            if (currentElement != element) {
 	                return;
@@ -323,7 +327,7 @@ function topQuery(element, crn, semester, year) {
     $(element).find("#StatisticsWrapper").hide();
 
     //jQuery.getJSON('/misc/weber/CSEvals/CrnStatistics.cfm?crn='+crn+'&semester='+semester+'&year='+year, function(data) 
-    jQuery.getJSON('CrnStatistics.cshtml?crn=' + crn + '&semester=' + semester + '&year=' + year, function (data) {
+    jQuery.getJSON(urlStart + '/CrnStatistics.cfm?crn=' + crn + '&semester=' + semester + '&year=' + year, function (data) {
         if (currentElement != element) {
             return;
         }
@@ -409,7 +413,7 @@ function detailsTop(element, crn, semester, year, clickedButton) {
     originalDiv.addClass("Already_Expanded");
     $(element).find("#top_detail").before('<p class="loadinggif">Calculating...</p></br><img class="loadinggif" src="..\\images\\ajax-loader.gif" />');
     //jQuery.get('/misc/weber/CSEvals/CrnStatistics.cfm?crn='+crn+'&semester='+semester+'&year='+year, function(data) 
-    jQuery.get('CrnStatistics.cshtml?crn=' + crn + '&semester=' + semester + '&year=' + year, function (data) {
+    jQuery.get(urlStart + '/CrnStatistics.cfm?crn=' + crn + '&semester=' + semester + '&year=' + year, function (data) {
         if (currentElement != element) {
             return;
         }
@@ -422,7 +426,7 @@ function detailsTop(element, crn, semester, year, clickedButton) {
             var crnStatistics2 = toKeyValPair(data.COLUMNS, String(data.DATA).split(','));
 
             //jQuery.get('/misc/weber/CSEvals/ScoreByCategory.cfm?crn='+crn+'&semester='+semester+'&year='+year, function(data2) 
-            jQuery.get('ScoreByCategory.cshtml?crn=' + crn + '&semester=' + semester + '&year=' + year, function (data2) {
+            jQuery.get(urlStart + '/ScoreByCategory.cfm?crn=' + crn + '&semester=' + semester + '&year=' + year, function (data2) {
                 statsTableString = statsTableString + ''
                 $.each(data2.DATA, function (i, array2) {
                     var questionNumList = array2[4].split(',');
@@ -579,7 +583,7 @@ function detailsQuery(element, crn, semester, year, questionId, clickedButton) {
     $.ajax(
 	{
 	    //url:("/misc/weber/CSEvals/QuestionDetails.cfm?crn="+crn+"&semester="+semester+"&year="+year+"&questionID="+questionId),
-	    url: ("QuestionDetails.cshtml?crn=" + crn + "&semester=" + semester + "&year=" + year + "&questionID=" + questionId),
+	    url: (urlStart + "QuestionDetails.cfm?crn=" + crn + "&semester=" + semester + "&year=" + year + "&questionID=" + questionId),
 	    type: "GET",
 	    dataType: "json",
 	    success: function (data) {

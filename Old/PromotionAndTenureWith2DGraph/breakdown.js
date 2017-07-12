@@ -3,7 +3,8 @@
 var Report = (function() {
 	//This is where the data is being pulled from
 	//Change to call from our API(?)
-    var TEST_URL = "https://chitester1dev.weber.edu:6838/misc/weber/csevals/"; 
+    var TEST_URL = "https://chitester1dev.weber.edu:6838/misc/weber/csevals/";
+    //&callback=? to fix callback not being called error 
     var IsRunningInTest = true;
 
     crnArray = [];
@@ -13,8 +14,10 @@ var Report = (function() {
      */
     self.onLoad = function (){
       if (IsRunningInTest) {
+          console.log("made to onload function if");
         GetClassesTaughtByInstructorTesting();
       } else {
+          console.log("made to onload function else");
         GetClassesTaughtByInstructor();
       }
     }
@@ -24,6 +27,7 @@ var Report = (function() {
      * @return return user ID
      */
     function getURLParameter(name) {
+        console.log("made it to getURLParameter function line 28");
         return decodeURIComponent(
 			(new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.search) || [, ""])
 			[1].replace(/\+/g, '%20')
@@ -35,6 +39,7 @@ var Report = (function() {
      * passes the CRN Array onto Load CRN Data Function
      */
     function GetClassesTaughtByInstructor() {
+        console.log("made it to GetClassesTaughtByInstructor function line 41");
 
       // Get instructorID from url
       instructorID = getURLParameter('instructorID');

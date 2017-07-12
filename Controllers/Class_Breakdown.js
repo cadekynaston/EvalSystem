@@ -2,6 +2,9 @@
 if (CRN != null) {
     crnArray = CRN.split(',');
 }
+else {
+    crnArray = JSON.parse('{"COLUMNS":["SECTIONID","SEMESTER","YEAR","BANNERCRN"], "DATA":[[192511,3,2013,30611]]}');
+}
 Semester = getURLParameter('Semester');
 Year = getURLParameter('Year');
 
