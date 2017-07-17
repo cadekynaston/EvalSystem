@@ -81,7 +81,7 @@ We (summer 2017) focused a lot of time on trying to get the Class_Breakdown and 
 
 ### Secretary Page
 See Hand off video for additional details from spring 2017.
-We (summer 2017) have created a nice accordion style page for this. It is called PermissionPage. This is pulling from the database, however we do not have tables created to allow us to save to the database.
+We (summer 2017) have created a nice accordion style page for this. It is called PermissionPage. This is pulling from the database, however we do not have tables created to allow us to save to the database. This page does not have a readme because it has a lot of comments throughout the page.
 
 ### Deployment
 Reach out to Brad and Chitester for this one. Good luck.
