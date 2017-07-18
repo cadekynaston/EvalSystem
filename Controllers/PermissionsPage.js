@@ -15,6 +15,8 @@ var indexSelected = 0;
 // NOTE: This will need to be changed each semester to the path that the current group has set up for their API calls
 var apiPath = "https://icarus.cs.weber.edu/~ck50991/CS4450/v1/"; //This is the path to the API calls that interface with the database.
 
+//used in the first page of the accordian view
+//the API call retrives a list of all instructors and pushed into the html select element
 app.controller("FacultySelectController", function ($scope, $http) {
     $http(
         {
@@ -50,6 +52,9 @@ app.controller("FacultySelectController", function ($scope, $http) {
     }
 });
 
+
+//this is the controller for the roles on the second page of the accordian view
+//the roles do not have a place in the database yet and are only stored temporarily
 app.controller("RoleController", function ($scope, $http) {
         
     $scope.buildRoleList = function () {
@@ -122,8 +127,6 @@ app.controller("DeptController", function ($scope, $http) {
     $scope.buildDepartmentsSelected = function () {
         var departments = document.getElementById("deptList").options;
 
-        // strip out the information we need to get objects in the form of
-        // {code: 8001, name: Computer Science}
         departmentsSelected.length = 0;
         for (var i = 0; i < departments.length; i++) {
             if (departments[i].selected) {
@@ -134,8 +137,7 @@ app.controller("DeptController", function ($scope, $http) {
             }
         }
 
-        console.log(departmentsSelected); //outputs the received data to the console (for debugging purposes only)
-        //document.getElementById('pane3-button').click(); //moves the view to the next window pane
+        console.log(departmentsSelected); //outputs the received data to the console for debugging purposes
     }
     $scope.showSelectValue = function (deptListSelected) {
         console.log(deptListSelected);
