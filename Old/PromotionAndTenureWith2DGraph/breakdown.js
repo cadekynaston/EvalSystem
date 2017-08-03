@@ -14,10 +14,8 @@ var Report = (function() {
      */
     self.onLoad = function (){
       if (IsRunningInTest) {
-          console.log("made to onload function if");
         GetClassesTaughtByInstructorTesting();
       } else {
-          console.log("made to onload function else");
         GetClassesTaughtByInstructor();
       }
     }
@@ -27,7 +25,6 @@ var Report = (function() {
      * @return return user ID
      */
     function getURLParameter(name) {
-        console.log("made it to getURLParameter function line 28");
         return decodeURIComponent(
 			(new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.search) || [, ""])
 			[1].replace(/\+/g, '%20')
@@ -39,7 +36,6 @@ var Report = (function() {
      * passes the CRN Array onto Load CRN Data Function
      */
     function GetClassesTaughtByInstructor() {
-        console.log("made it to GetClassesTaughtByInstructor function line 41");
 
       // Get instructorID from url
       instructorID = getURLParameter('instructorID');
@@ -51,10 +47,9 @@ var Report = (function() {
         $.ajax({
           url: InstructorClassesTaughtUrl,
           type: "GET",
-          dataType: "jsonp",
-          jsonpCallback: "callback",
+          dataType: "json",
           success: function (data) {
-              data = JSON.parse(data);
+              //data = JSON.parse(data);
               crnArray = [];
               if (data.DATA.length == 0) {
                   return;
@@ -75,10 +70,9 @@ var Report = (function() {
           $.ajax({
             url: InstructorClassesTaughtUrl + '?instructorID=' + instructorID,
             type: "GET",
-            dataType: "jsonp",
-            jsonpCallback: "callback",
+            dataType: "json",
             success: function (data) {
-              data = JSON.parse(data);
+              //data = JSON.parse(data);
               crnArray = [];
               if (data.DATA.length == 0) {
                   return;
@@ -100,8 +94,6 @@ var Report = (function() {
      * Passes on CRN Array data onto Load Crn Data Function
      */
     function GetClassesTaughtByInstructorTesting() {
-
-	console.log("testing");
 	
       var data = JSON.parse('{"COLUMNS":["SECTIONID","SEMESTER","YEAR","BANNERCRN"], "DATA":[[192511,3,2013,30611]]}');
 
@@ -192,10 +184,10 @@ var Report = (function() {
         $.ajax({
           url: essayAnswersUrl + crn + '&semester=' + semester + '&year=' + year,
           type: "GET",
-          dataType: "jsonp",
-          jsonpCallback: "callback",
+          dataType: "json",
           success: function (data) {
-            data = JSON.parse(data);
+              data = {"COLUMNS":["ID","CRN","SUBJECTCODE","COURSENUMBER","SEMESTER","BLOCK","ID","ID","QUESTION","ANSWER","STUDENT"],"DATA":[[192511,30611,"CS",2420,3,null,3979607,146955418,"What did you particularly like about this course?","I really liked the content, we learned methods of coding for solving a wide variety of common problems.",1],[192511,30611,"CS",2420,3,null,3979608,146955419,"What improvements would you suggest for this course?","I hate the Utah Jazz.",1],[192511,30611,"CS",2420,3,null,3979609,146955420,"Please feel free to write any additional comments about this course or instructor.","Brad is a great and motivated professor. He has a way of lightening the mood even when it comes to serious homework assignments that were tough. He is also very helpful outside of class if you need help. The course was tough but I feel it was necessary and that I am taking away a lot with me.",1],[192511,30611,"CS",2420,3,null,3979607,146955398,"What did you particularly like about this course?","The Teacher did a good job of explaining new topics",2],[192511,30611,"CS",2420,3,null,3979608,146955399,"What improvements would you suggest for this course?","More coding in class would have helped.",2],[192511,30611,"CS",2420,3,null,3979609,146955400,"Please feel free to write any additional comments about this course or instructor.","No Response",2],[192511,30611,"CS",2420,3,null,3979607,147142758,"What did you particularly like about this course?","The multi-threading assignment",3],[192511,30611,"CS",2420,3,null,3979608,147142759,"What improvements would you suggest for this course?","No Response",3],[192511,30611,"CS",2420,3,null,3979609,147142760,"Please feel free to write any additional comments about this course or instructor.","No Response",3],[192511,30611,"CS",2420,3,null,3979607,146953515,"What did you particularly like about this course?","Everything, Brad answered all questions asked and is very knowledgeable on the subject! -CW\r\n       .  .\"|\r\n      \/| \/  |  _.----._ \r\n     . |\/  |.-\"        \".  \/|\r\n    \/                    \\\/ |__\r\n   |           _.-\"\"\"\/        \/\r\n   |       _.-\"     \/.\"|     \/\r\n    \".__.-\"         \"  |            |              |       |\r\n       \/_      _.._   | ___  \/\r\n     .\"  \"\"-.-\"    \". |\/.-.\\\/\r\n    |    0  |    0  |     \/ |\r\n    \\      \/\\_     _\/    \"_\/ \r\n     \"._ _\/   \"---\"       |  \r\n     \/\"\"\"                 |  \r\n     \\__.--                |_ \r\n       )          .        | \". \r\n      \/        _.-\"\\        |  \".\r\n     \/     _.-\"             |    \".  \r\n    (_ _.-|                  |     |\"-._.\r\n      \"    \"--.             .J     _.-'\r\n              \/\\        _.-\" | _.-'\r\n             \/  \\__..--\"   _.-'\r\n            \/   |      _.-'         \r\n           \/| \/\\|  _.-'                     \r\n          \/ |\/ _.-'                              \r\n         \/|_.-'                                   \r\n       _.-'",4],[192511,30611,"CS",2420,3,null,3979608,146953516,"What improvements would you suggest for this course?","None\r\n    .       ..       .\r\n    |\\      ||      \/|\r\n    | \\     ||     \/ |\r\n    |  \\    ||    \/  |\r\n    |  :\\___JL___\/   |\r\n    |  :|##XLJ: :|   |\r\n    '\\ :|###||: X|  \/'\r\n      \\:|###||:X#| \/\r\n       |==========|\r\n        |###XXX;;|\r\n        |##XX:: :|\r\n        |##Xn:: :|\r\n        |##XU:: :|\r\n        |##XX:: :|\r\n        |##XX:: :|\r\n        |##XX:: :|\r\n        |##XX:: n|\r\n        |##XX:: U|\r\n        |##XX:: :|\r\n        |##XX:: :|\r\n        |##XX:: :|\r\n        |##Xn:: :|\r\n        |##XU:: :|\r\n        |##XX:: :|\r\n        |##XX:: :|\r\n        |##XX:: :|\r\n        |##XX:: n|\r\n        |##XX:: U|\r\n        |##XX:: :|\r\n        |##XX:: :|\r\n        |##XX:: :|\r\n        |##Xn:: :|\r\n        |##XU:: :|\r\n        |##XX:: :|\r\n        |##XX:: :|\r\n        |##XX:: :|\r\n        |##XX:: n|\r\n        |##XX:: U|\r\n        |##XX:: :|\r\n        |##XX:: :|\r\n        |##XX:: :|\r\n        |##,_,: :|\r\n        |.\/ T \\.:|\r\n        || o|o |:|\r\n        ||  |  |:|\r\n      .============.\r\n     .==============.\r\n    .================.",4],[192511,30611,"CS",2420,3,null,3979609,146953517,"Please feel free to write any additional comments about this course or instructor.","Brad you are my favorite CS instructor keep it up! -CW\r\n                c==o\r\n              _\/____\\_\r\n       _.,--'\" ||^ || \"`z._\r\n      \/_\/^ ___\\||  || _\/o\\ \"`-._\r\n    _\/  ]. L_| || .||  \\_\/_  . _`--._\r\n   \/_~7  _ . \" ||. || \/] \\ ]. (_)  . \"`--.\r\n  |__7~.(_)_ []|+--+|\/____T_____________L|\r\n  |__|  _^(_) \/^   __\\____ _   _|\r\n  |__| (_){_) J ]K{__ L___ _   _]\r\n  |__| . _(_) \\v     \/__________|________\r\n  l__l_ (_). []|+-+-<\\^   L  . _   - ---L|\r\n   \\__\\    __. ||^l  \\Y] \/_]  (_) .  _,--'\r\n     \\~_]  L_| || .\\ .\\\\\/~.    _,--'\"\r\n      \\_\\ . __\/||  |\\  \\`-+-<'\"\r\n        \"`---._|J__L|X o~~|[\\\\      \r\n               \\____\/ \\___|[\/\/\r\n                `--'   `--+-'",4],[192511,30611,"CS",2420,3,null,3979607,147622217,"What did you particularly like about this course?","No Response",5],[192511,30611,"CS",2420,3,null,3979608,147622218,"What improvements would you suggest for this course?","No Response",5],[192511,30611,"CS",2420,3,null,3979609,147622219,"Please feel free to write any additional comments about this course or instructor.","No Response",5],[192511,30611,"CS",2420,3,null,3979607,146953555,"What did you particularly like about this course?","No Response",6],[192511,30611,"CS",2420,3,null,3979608,146953556,"What improvements would you suggest for this course?","No Response",6],[192511,30611,"CS",2420,3,null,3979609,146953557,"Please feel free to write any additional comments about this course or instructor.","No Response",6],[192511,30611,"CS",2420,3,null,3979607,147312528,"What did you particularly like about this course?","Brad is an excellent instructor and made this normally very hard course more understandable and manageable for me. I would take another class from him in a heartbeat and recommend him to anyone else needing to take this course. The lectures posted online was a huge help. ",7],[192511,30611,"CS",2420,3,null,3979608,147312529,"What improvements would you suggest for this course?","The nature of the course is quite difficult. I would only suggest that Brad keep doing what he is doing to make it easier for future students. ",7],[192511,30611,"CS",2420,3,null,3979609,147312530,"Please feel free to write any additional comments about this course or instructor.","I like Brads sense of humor, it makes class more enjoyable and entertaining. He still manages his time effectively and stimulates learning. He seems to genuinely care about the students, and he makes himself available when they need him. ",7],[192511,30611,"CS",2420,3,null,3979607,146953575,"What did you particularly like about this course?","i liked the homeworks given in class",8],[192511,30611,"CS",2420,3,null,3979608,146953576,"What improvements would you suggest for this course?","n\/a",8],[192511,30611,"CS",2420,3,null,3979609,146953577,"Please feel free to write any additional comments about this course or instructor.","fun class",8],[192511,30611,"CS",2420,3,null,3979607,146954394,"What did you particularly like about this course?","No Response",9],[192511,30611,"CS",2420,3,null,3979608,146954395,"What improvements would you suggest for this course?","No Response",9],[192511,30611,"CS",2420,3,null,3979609,146954396,"Please feel free to write any additional comments about this course or instructor.","No Response",9],[192511,30611,"CS",2420,3,null,3979607,147064661,"What did you particularly like about this course?","I liked learning the algorithms that were presented for us to code.",10],[192511,30611,"CS",2420,3,null,3979608,147064662,"What improvements would you suggest for this course?","Perhaps some better pseudo code for learning algorithms.  I think many people struggled with knowing how to do a certan thing and sometimes a little pseudocode is a good place to start.",10],[192511,30611,"CS",2420,3,null,3979609,147064663,"Please feel free to write any additional comments about this course or instructor.","No Response",10],[192511,30611,"CS",2420,3,null,3979607,146954978,"What did you particularly like about this course?","Some of the side tangents taken for respite.",11],[192511,30611,"CS",2420,3,null,3979608,146954979,"What improvements would you suggest for this course?","Not much.",11],[192511,30611,"CS",2420,3,null,3979609,146954980,"Please feel free to write any additional comments about this course or instructor.","No Response",11],[192511,30611,"CS",2420,3,null,3979607,146949070,"What did you particularly like about this course?","I found this course really interesting, especially the algorithm aspect of the course. But instead of writing a long droll evaluation epic, I shall keep my response brief. Pointers are amazing and I truly appreciated this professor's help on a project outside of this class. His helpfulness and enthusiasm made this class really awesome. ",12],[192511,30611,"CS",2420,3,null,3979608,146949071,"What improvements would you suggest for this course?","I would've appreciated a much more difficult assignment on AVL and Btrees instead of just coping from the book. More structure would be nice(although I do appreciate how fluid the course is too) ",12],[192511,30611,"CS",2420,3,null,3979609,146949072,"Please feel free to write any additional comments about this course or instructor.","Figure out the next number in the sequence - \r\n1, 11, 21, 1211, 111221, 312211, 13112221\r\n\r\nI'm not sure what I'm supposed to write in this box.  Since the two previous boxes are for positive and negative comments, is this box for like neutral comments? If I feel neutral about something why would I comment it at all?",12],[192511,30611,"CS",2420,3,null,3979607,146579454,"What did you particularly like about this course?","It was very interesting",13],[192511,30611,"CS",2420,3,null,3979608,146579455,"What improvements would you suggest for this course?","Not appending \"Type\" to the name of every abstract data type, even if the book does",13],[192511,30611,"CS",2420,3,null,3979609,146579456,"Please feel free to write any additional comments about this course or instructor.","No Response",13],[192511,30611,"CS",2420,3,null,3979607,146472090,"What did you particularly like about this course?","A lot of help with assignment shells at the beginning of the course that were already compilable.",14],[192511,30611,"CS",2420,3,null,3979608,146472091,"What improvements would you suggest for this course?","After a couple assignments wean students off of compilable assignment shells. It is better to have to make the entire assignment after the initial shock of the course has passed.",14],[192511,30611,"CS",2420,3,null,3979609,146472092,"Please feel free to write any additional comments about this course or instructor.","More feedback on grading assignments and what was wrong with them specifically and how to complete them. Faster grading timeframes for assignments as well. Sometimes the class progresses quickly while students may still be wondering how\/if they went wrong in previous concepts on assignments.",14],[192511,30611,"CS",2420,3,null,3979607,147086397,"What did you particularly like about this course?","Lots of lab time was given for help with the assignments.",15],[192511,30611,"CS",2420,3,null,3979608,147086398,"What improvements would you suggest for this course?","No Response",15],[192511,30611,"CS",2420,3,null,3979609,147086399,"Please feel free to write any additional comments about this course or instructor.","No Response",15],[192511,30611,"CS",2420,3,null,3979607,147452194,"What did you particularly like about this course?","the extra challenge provided in the assignments",16],[192511,30611,"CS",2420,3,null,3979608,147452195,"What improvements would you suggest for this course?","Can't think of any",16],[192511,30611,"CS",2420,3,null,3979609,147452196,"Please feel free to write any additional comments about this course or instructor.","The instructor is excellent, he spends time making sure we understand what is being taught.",16],[192511,30611,"CS",2420,3,null,3979607,146387037,"What did you particularly like about this course?","the instructor.",17],[192511,30611,"CS",2420,3,null,3979608,146387038,"What improvements would you suggest for this course?","harder assignments.",17],[192511,30611,"CS",2420,3,null,3979609,146387039,"Please feel free to write any additional comments about this course or instructor.","the assignments were frequently extended. I feel that this was not necessary. Homework assignments would have been much better if they were more challenging for the time allotment or if there were more assignments.",17],[192511,30611,"CS",2420,3,null,3979607,146717339,"What did you particularly like about this course?","No Response",18],[192511,30611,"CS",2420,3,null,3979608,146717340,"What improvements would you suggest for this course?","No Response",18],[192511,30611,"CS",2420,3,null,3979609,146717341,"Please feel free to write any additional comments about this course or instructor.","No Response",18],[192511,30611,"CS",2420,3,null,3979607,146747812,"What did you particularly like about this course?","The best thing about this course was its transparency between online and in class structure. It provided flexibility with an ability to follow up in class for more instruction.",19],[192511,30611,"CS",2420,3,null,3979608,146747813,"What improvements would you suggest for this course?","Get somebody else to teach it and\/or use a book that can flow the information instead of the professor.",19],[192511,30611,"CS",2420,3,null,3979609,146747814,"Please feel free to write any additional comments about this course or instructor.","Brad spoke to me the 2nd day of class and said to me, \"When you are having problems, I won't help you in this course.\"  He said this because I was concurrently enrolled in 1410 which was apparently a pre-req of the class.  I didn't know this, the system allowed me to register, and with adequate assistance I probably could have passed this class. Even dismissing the conversation where he said he wouldn't help me when I had problems, Brad constantly belittled students after asking for questions and feedback.  He would ask if people had questions, and when they did, he would gripe and ask who their 1410 professor was, and sometimes he would get around to actually answering their question. About halfway through the semester, after being told I wouldn't receive any help from Brad and having seen how students were being treated for having questions, I decided to try to follow the book and try to do the assignments from that. If Brad doesn't want to teach he should at least provide assignments that can be attempted from material that flows from the book but that certainly wasn't the case either.  There is no doubt in my mind I will fail this class, and I take full responsibility for it. But what bothers me is to think Brad is going to railroad other students and belittle them to the point of losing interest from the program, from the school or from other similar life achievements. In my opinion Brad should work in industry, not in education\/academia.",19],[192511,30611,"CS",2420,3,null,3979607,146373123,"What did you particularly like about this course?","I really enjoyed the teaching methods. As a face-to-face student I didn't miss any lecture days but it was extremely helpful to be able to come back to the recorded lectures to review topics.",20],[192511,30611,"CS",2420,3,null,3979608,146373124,"What improvements would you suggest for this course?","The book wasn't terribly useful. Brad seemed to know more about the topics than the author, so my time was better spent listening to him than reading the book.",20],[192511,30611,"CS",2420,3,null,3979609,146373125,"Please feel free to write any additional comments about this course or instructor.","I really appreciate the amount of work that Brad must have put in to cook up challenging assignments for us. \r\nI wish I could rate Brad higher in the \"knowledgeable\" category, because he REALLY knows his stuff and it was really great to have him share his expertise with us.",20],[192511,30611,"CS",2420,3,null,3979607,146935310,"What did you particularly like about this course?","Flexibility.",21],[192511,30611,"CS",2420,3,null,3979608,146935311,"What improvements would you suggest for this course?","It would be nice if there were suppose to be status updates throughout the final project to ensure group member's participation. ",21],[192511,30611,"CS",2420,3,null,3979609,146935312,"Please feel free to write any additional comments about this course or instructor.","........................,,-~*~,,\r\n.......................\/:.:.:.:.:.|\r\n......................|;.;.;.;.;.\/\r\n......................|.;.;.;.;.|\r\n............._,,,,,_.).;.;.;.;.|\r\n.........,,-\":.:.:.:.\"~-,;.;.;.|\r\n........(_,,,,---,,_:.:.);.;.;..\",,\r\n......,-\":.:.:.:.:.\"\"-,,\/;.;.;.;.;.\",\r\n.....(:.__,,,,,,,,,___);.;.;.;.;.;|\r\n.....\/\"\":.:.:.:.:.:.:¯\"\"\\;.;.;.;.;.,\"\r\n....\\\",__,,,,,,,,,,,__\/;;;;;;;;;\/.....\\.::.:.:.:.:.:.:.;.);;;;;;;;;\/:.......\\,,,,,---~~~~;;;;;;;;,\"::::..........\"\"\"~~--,,,,,,,,,,-\"::::::::::...................\\::::::::::::::::::::::\\",21]]}
+            //data = JSON.parse(data);
             if (currentElement != element) {
                 return;
             }
@@ -253,10 +245,10 @@ var Report = (function() {
     	{
     	    url: answerCountUrl + '?crn=' + crn + '&semester=' + semester + '&year=' + year,
     	    type: "GET",
-    	    dataType: "jsonp",
-          jsonpCallback: 'callback',
+    	    dataType: "json",
     	    success: function (data) {
-            data = JSON.parse(data);
+                data = {"COLUMNS":["COURSE","CRN","QUESTION","ANSWERS","ANSWER COUNT","QUESTIONID","SEQUENCE","STUDENT COUNT"],"DATA":[["CS 2420",30611,"The instructor created a stimulating learning environment.","agree",5,3979590,1,19],["CS 2420",30611,"The instructor created a stimulating learning environment.","strongly agree",13,3979590,1,19],["CS 2420",30611,"The instructor created a stimulating learning environment.","strongly disagree",1,3979590,1,19],["CS 2420",30611,"The instructor was knowledgeable in the course subject material.","agree",2,3979591,2,19],["CS 2420",30611,"The instructor was knowledgeable in the course subject material.","strongly agree",17,3979591,2,19],["CS 2420",30611,"The instructor communicated clearly and was easy to understand.","agree",4,3979592,3,19],["CS 2420",30611,"The instructor communicated clearly and was easy to understand.","strongly agree",14,3979592,3,19],["CS 2420",30611,"The instructor communicated clearly and was easy to understand.","strongly disagree",1,3979592,3,19],["CS 2420",30611,"The instructor was respectful and cared about me personally as a student.","agree",6,3979593,4,19],["CS 2420",30611,"The instructor was respectful and cared about me personally as a student.","strongly agree",12,3979593,4,19],["CS 2420",30611,"The instructor was respectful and cared about me personally as a student.","strongly disagree",1,3979593,4,19],["CS 2420",30611,"The instructor was available and responded to inquiries in a timely manner.","neutral",2,3979594,5,19],["CS 2420",30611,"The instructor was available and responded to inquiries in a timely manner.","agree",5,3979594,5,19],["CS 2420",30611,"The instructor was available and responded to inquiries in a timely manner.","strongly agree",12,3979594,5,19],["CS 2420",30611,"The instructor was timely in returning grades for assignments and\/or tests.","disagree",1,3979595,6,19],["CS 2420",30611,"The instructor was timely in returning grades for assignments and\/or tests.","neutral",10,3979595,6,19],["CS 2420",30611,"The instructor was timely in returning grades for assignments and\/or tests.","agree",3,3979595,6,19],["CS 2420",30611,"The instructor was timely in returning grades for assignments and\/or tests.","strongly agree",5,3979595,6,19],["CS 2420",30611,"I was given sufficient resources and reference material throughout the course.","strongly disagree",1,3979596,7,19],["CS 2420",30611,"I was given sufficient resources and reference material throughout the course.","agree",5,3979596,7,19],["CS 2420",30611,"I was given sufficient resources and reference material throughout the course.","neutral",1,3979596,7,19],["CS 2420",30611,"I was given sufficient resources and reference material throughout the course.","strongly agree",12,3979596,7,19],["CS 2420",30611,"The course content was professional and of high quality.","agree",4,3979597,8,19],["CS 2420",30611,"The course content was professional and of high quality.","neutral",2,3979597,8,19],["CS 2420",30611,"The course content was professional and of high quality.","strongly agree",12,3979597,8,19],["CS 2420",30611,"The course content was professional and of high quality.","strongly disagree",1,3979597,8,19],["CS 2420",30611,"This course increased my knowledge of the subject matter.","strongly agree",14,3979598,9,19],["CS 2420",30611,"This course increased my knowledge of the subject matter.","agree",4,3979598,9,19],["CS 2420",30611,"This course increased my knowledge of the subject matter.","strongly disagree",1,3979598,9,19],["CS 2420",30611,"The course content prepared me for the assignments and tests.","agree",8,3979599,10,19],["CS 2420",30611,"The course content prepared me for the assignments and tests.","neutral",1,3979599,10,19],["CS 2420",30611,"The course content prepared me for the assignments and tests.","strongly agree",9,3979599,10,19],["CS 2420",30611,"The course content prepared me for the assignments and tests.","strongly disagree",1,3979599,10,19],["CS 2420",30611,"I was appropriately challenged in this course.","strongly agree",9,3979600,11,19],["CS 2420",30611,"I was appropriately challenged in this course.","strongly disagree",2,3979600,11,19],["CS 2420",30611,"I was appropriately challenged in this course.","agree",7,3979600,11,19],["CS 2420",30611,"I was appropriately challenged in this course.","neutral",1,3979600,11,19],["CS 2420",30611,"Course objectives were clearly communicated.","strongly disagree",1,3979601,12,19],["CS 2420",30611,"Course objectives were clearly communicated.","agree",6,3979601,12,19],["CS 2420",30611,"Course objectives were clearly communicated.","neutral",1,3979601,12,19],["CS 2420",30611,"Course objectives were clearly communicated.","strongly agree",11,3979601,12,19],["CS 2420",30611,"Course content and time was well spent in support of the objectives.","neutral",1,3979602,13,19],["CS 2420",30611,"Course content and time was well spent in support of the objectives.","agree",7,3979602,13,19],["CS 2420",30611,"Course content and time was well spent in support of the objectives.","strongly agree",11,3979602,13,19],["CS 2420",30611,"The course as a whole followed a logical pattern of organization.","agree",9,3979603,14,19],["CS 2420",30611,"The course as a whole followed a logical pattern of organization.","neutral",1,3979603,14,19],["CS 2420",30611,"The course as a whole followed a logical pattern of organization.","strongly agree",8,3979603,14,19],["CS 2420",30611,"The course as a whole followed a logical pattern of organization.","strongly disagree",1,3979603,14,19],["CS 2420",30611,"I feel the grading criteria for this course was fair.","agree",5,3979604,15,19],["CS 2420",30611,"I feel the grading criteria for this course was fair.","neutral",1,3979604,15,19],["CS 2420",30611,"I feel the grading criteria for this course was fair.","strongly agree",12,3979604,15,19],["CS 2420",30611,"I feel the grading criteria for this course was fair.","strongly disagree",1,3979604,15,19],["CS 2420",30611,"I felt the course was an effective use of my time.","agree",6,3979605,16,19],["CS 2420",30611,"I felt the course was an effective use of my time.","strongly agree",12,3979605,16,19],["CS 2420",30611,"I felt the course was an effective use of my time.","strongly disagree",1,3979605,16,19],["CS 2420",30611,"Please rate the quality of the texbook used in the course (choose N\/A if no book was used)","Excellent",2,3979606,17,19],["CS 2420",30611,"Please rate the quality of the texbook used in the course (choose N\/A if no book was used)","N\/A",1,3979606,17,19],["CS 2420",30611,"Please rate the quality of the texbook used in the course (choose N\/A if no book was used)","Very poor",1,3979606,17,19],["CS 2420",30611,"Please rate the quality of the texbook used in the course (choose N\/A if no book was used)","Average",5,3979606,17,19],["CS 2420",30611,"Please rate the quality of the texbook used in the course (choose N\/A if no book was used)","good",9,3979606,17,19],["CS 2420",30611,"Please rate the quality of the texbook used in the course (choose N\/A if no book was used)","poor",1,3979606,17,19]]}
+            //data = JSON.parse(data);
     	        if (currentElement != element) {
     	            return;
     	        }
@@ -417,18 +409,15 @@ var Report = (function() {
 
       //url: '/misc/weber/CSEvals/CrnDetails.cfm?crn='+crn+'&semester='+semester+'&year='+year,
       var CrnDetailsUrl = IsRunningInTest ? TEST_URL + "CrnDetails.cfm" : "CrnDetails.cfm";
-      console.log('hello, before ajax call');
         $.ajax(
     	{
     	    url: CrnDetailsUrl + '?crn=' + crn + '&semester=' + semester + '&year=' + year,
     	    type: 'GET',
-    	    dataType: 'jsonp',
-            jsonpCallback: 'callback',
+    	    dataType: 'json',
     	    success: function (data) {
-                console.log('callback success:.', data);
-            data = JSON.parse(data);
+                data = {"COLUMNS":["CLASSSTRING","BANNERCRN","SECTION","SEMESTER","SEMESTERSTRING","BLOCK","YEAR","SUBJECTCODE","COURSENUMBER","INSTRUCTORID","FIRSTNAME","LASTNAME","EMAIL","RESPONSES","STUDENTS","TESTID","TESTNAME"],"DATA":[["CS2420",30611,null,3,"Spring",null,2013,"CS",2420,887969243,"Bradley","Peterson","b_peterson@yahoo.com",323,19,64529,"Eval Dept of CS - OLD"]]}
+            //data = JSON.parse(data);
     	        try {
-                    console.log('made it to try');
     	            if (currentElement != element) {
     	                return;
     	            }
@@ -442,7 +431,6 @@ var Report = (function() {
     	            }
     	            else				//RETREIVE AND UTILIZE TITLE DATA
     	            {
-                        console.log('else in titleQuery');
     	                $.each(data.DATA, function (i, array) {
     	                    var dataArray = toKeyValPair(data.COLUMNS, String(array).split(','));	//CONVERTS DATA TO A KEY VALUE PAIR FOR READABILITY
     	                    element.semesterName = dataArray['SEMESTERSTRING'];
@@ -462,12 +450,10 @@ var Report = (function() {
     	            titleQueryComplete(element, true);
     	        }
     	        catch (thrownError) {
-                    console.log('made it to catch');
     	            titleQueryComplete(element, false);
     	        }
     	    },
     	    error: function (xhr, ajaxOptions, thrownError) {
-                console.log('error in ajax of titleQuery', thrownError);
     	        if (currentElement != element) {
     	            return;
     	        }
@@ -475,8 +461,6 @@ var Report = (function() {
     	    }
     	});
     }
-
-    console.log('made it above topQuery');
     function topQuery(element, crn, semester, year) {
         $(element).find("#StatisticsWrapper").hide();
 
@@ -485,10 +469,10 @@ var Report = (function() {
         $.ajax({
           url: CrnStatisticsUrl + '?crn=' + crn + '&semester=' + semester + '&year=' + year,
           type: "GET",
-          dataType: "jsonp",
-          jsonpCallback: 'callback',
+          dataType: "json",
           success: function (data) {
-            data = JSON.parse(data);
+              data = {"COLUMNS":["INSTRUCTORSEMESTERAVERAGE","INSTRUCTORSEMESTERSTDEVIATION","DEPARTMENTSEMESTERAVERAGE","DEPARTMENTSEMESTERSTDEVIATION","CLASSSCORE","CLASSSTDEVIATION","DECTILE","DEPARTMENTCLASSFIVEYEARAVERAGE","DEPARTMENTCLASSFIVEYEARSTDEVIATION","INSTRUCTORCLASSFIVEYEARAVERAGE","INSTRUCTORCLASSFIVEYEARSTDEVIATION"],"DATA":[[3.203559,1.1150445601146897,3.204520,1.0093619384613277,3.392982,0.955108085942405,7,3.415384,0.881007133921016,3.415384,0.881007133921016]]}
+            //data = JSON.parse(data);
             if (currentElement != element) {
                 return;
             }
@@ -536,7 +520,6 @@ var Report = (function() {
                 detailsTop(element, crn, semester, year, tpButton);
             }
             catch (error) {
-                console.log('error in topQuery');
                 topQueryComplete(element, false);
             }
 
@@ -575,6 +558,7 @@ var Report = (function() {
         //jQuery.get('/misc/weber/CSEvals/CrnStatistics.cfm?crn='+crn+'&semester='+semester+'&year='+year, function(data)
         var CrnStatisticsUrl = IsRunningInTest ? TEST_URL + "CrnStatistics.cfm" : "CrnStatistics.cfm";
         jQuery.get(CrnStatisticsUrl + '?crn=' + crn + '&semester=' + semester + '&year=' + year, function (data) {
+            data = {"COLUMNS":["INSTRUCTORSEMESTERAVERAGE","INSTRUCTORSEMESTERSTDEVIATION","DEPARTMENTSEMESTERAVERAGE","DEPARTMENTSEMESTERSTDEVIATION","CLASSSCORE","CLASSSTDEVIATION","DECTILE","DEPARTMENTCLASSFIVEYEARAVERAGE","DEPARTMENTCLASSFIVEYEARSTDEVIATION","INSTRUCTORCLASSFIVEYEARAVERAGE","INSTRUCTORCLASSFIVEYEARSTDEVIATION"],"DATA":[[3.203559,1.1150445601146897,3.204520,1.0093619384613277,3.392982,0.955108085942405,7,3.415384,0.881007133921016,3.415384,0.881007133921016]]};
             if (currentElement != element) {
                 return;
             }
@@ -585,7 +569,8 @@ var Report = (function() {
                 var crnStatistics2 = toKeyValPair(data.COLUMNS, String(data.DATA).split(','));
 
                 //jQuery.get('/misc/weber/CSEvals/ScoreByCategory.cfm?crn='+crn+'&semester='+semester+'&year='+year, function(data2)
-                jQuery.get('ScoreByCategory.cshtml?crn=' + crn + '&semester=' + semester + '&year=' + year, function (data2) {
+                jQuery.get(TEST_URL + 'ScoreByCategory.cfm?crn=' + crn + '&semester=' + semester + '&year=' + year, function (data2) {
+                    data2 = {"COLUMNS":["AVERAGE","STANDARDDEVIATION","CATEGORYNAME","CATEGORYID","QUESTIONS"],"DATA":[[3.438596,0.9083925239297972,"Instructor",218692,"1  ,2  ,3  ,4  ,5  ,6  "],[3.347368,1.0439643173235733,"Content",218693,"10 ,11 ,7  ,8  ,9  "],[3.381578,0.9027313125812586,"Method",218694,"12 ,13 ,14 ,15 "],[3.027027,1.0523201261584747,"Other",218695,"16 ,17 "]]};
                     statsTableString = statsTableString + ''
                     $.each(data2.DATA, function (i, array2) {
                         var questionNumList = array2[4].split(',');
@@ -745,10 +730,9 @@ var Report = (function() {
     	{
     	    url: (QuestionDetailsUrl + "?crn=" + crn + "&semester=" + semester + "&year=" + year + "&questionID=" + questionId),
     	    type: "GET",
-    	    dataType: "jsonp",
-          jsonpCallback: 'callback',
+    	    dataType: "json",
     	    success: function (data) {
-              data = JSON.parse(data);
+              //data = JSON.parse(data);
     	        //resultString += '<p class="loadinggif">Calculating...</p></br><img class="loadinggif" src=".\\images\\ajax-loader.gif';
     	        //expanderDiv.append(resultString);
     	        //var connectionString = '';
@@ -1061,7 +1045,7 @@ var Report = (function() {
         $('#crnErrors').append('CRN - ' + wrapperElement.crn + '| Semester - ' + wrapperElement.semesterNum + '| Year - ' + wrapperElement.year + '  is an invalid '
             + 'class<br />');
         $('#footer' + wrapperElement.crn).remove();
-        $(wrapperElement).remove();
+        //$(wrapperElement).remove();
 
     }
     function failedQueries(element) {
@@ -1148,17 +1132,14 @@ var Report = (function() {
 
         if (!passed) {
             //execute failed event
-            console.log('Failed');
             onErrorQueries(wrapperElement);
         }
         if (failedQueries(wrapperElement)) {
-            console.log('failed q');
             nextCrn();
             return;
         }
         wrapperElement["TITLEQUERY"] = passed;
         if (checkCompletedAllQueries(wrapperElement)) {
-            console.log('Passed');
             //advance to next crn
             nextCrn();
         }
@@ -1188,7 +1169,6 @@ var Report = (function() {
         mainQuery(element, CRN, Semester, Year);
         essayQuery(element, CRN, Semester, Year);
         topQuery(element, CRN, Semester, Year);
-        console.log('add to report');
 
 
         //add footer that adds a page break for css

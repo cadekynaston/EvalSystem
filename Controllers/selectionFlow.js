@@ -262,7 +262,7 @@ function buildReport() {
 			// seems to have issues in Edge, but we ran out of time
 			window.sessionStorage.coursesSelected = courseListString;
 			
-			window.location="Class_Breakdown.html";
+			window.location="../Old/PromotionAndTenureWith2DGraph/PromotionTenureReport.html";
 			////////////////////////////////////////////////////////////////////////replace all above
 			break;
 		case "oneReport":
