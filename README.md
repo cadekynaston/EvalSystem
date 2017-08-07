@@ -77,11 +77,11 @@ List of added stored procedures
 ## Next Steps
 
 ### Generating a report
-We (summer 2017) focused a lot of time on trying to get the Class_Breakdown and the Pingraph web pages to pull correct data. We have the pingraph pretty much there. The scores being displayed are incorrect because of the math used to average the scores. For the Class_Breakdown page, we are really close. We can see the data is there if we go to the actual url with the CRN, semester, and year, but we are having issues saying that we are not logged in. We are going to try and place these pages on the dame server as chitester and see if this solves the error.
+We (summer 2017) focused a lot of time on trying to get the Class_Breakdown and the Pingraph web pages to pull correct data. We have the pingraph pretty much there. The scores being displayed are incorrect because of the math used to average the scores. For the Class_Breakdown page, we are really close. We can see the data is there if we go to the actual url with the CRN, semester, and year, but we are having issues saying that we are not logged in. We are going to try and place these pages on the same server as chitester and see if this solves the error. We are in the process of placing these pages on chitester dev site. One of the members in our group was employed there, so he was given ftp access to make this happen. Our goal is to get the class_breakdown page and the selection flow page working all together. On the class_breakdown page we implemented the printing format that Brad requested, meaning it will do a page break in between reports.
 
 ### Secretary Page
 See Hand off video for additional details from spring 2017.
 We (summer 2017) have created a nice accordion style page for this. It is called PermissionPage. This is pulling from the database, however we do not have tables created to allow us to save to the database. This page does not have a readme because it has a lot of comments throughout the page.
 
 ### Deployment
-Reach out to Brad and Chitester for this one. Good luck.
+Reach out to Brad and Chitester for this one. Also check and see if chitester is using a different language and adjust the project early if necessary. Good luck.
