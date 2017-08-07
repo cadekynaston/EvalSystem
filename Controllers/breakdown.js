@@ -1,5 +1,6 @@
 ﻿
 
+var urlStart = "https://chitester1dev.weber.edu:6838/misc/weber/CSEvals"
 
 function getPixelLength(score) {
     return score * 100;
@@ -46,11 +47,73 @@ function getAnswerLength(answerCount, currentTotal) {
     returnValue /= 10;
     return returnValue;
 }
+function logResults(json){
 
+  console.log(json);
+}
 //ESSAY QUERY FUNCTION*************************************************************************************************************************************************
 function essayQuery(element, crn, semester, year) {
-    //jQuery.getJSON('/misc/weber/CSEvals/essayAnswers.cfm?crn='+crn+'&semester='+semester+'&year='+year, function(data) 
-    jQuery.getJSON('EssayAnswers.cshtml?crn=' + crn + '&semester=' + semester + '&year=' + year, function (data) {
+
+
+// $.ajax({
+//   url: urlStart + '/essayAnswers.cfm?crn='+crn+'&semester='+semester+'&year='+year,
+//   dataType: "jsonp",
+//   jsonpCallback: "logResults"
+// });
+    // $.getJSON(urlStart + '/essayAnswers.cfm?crn='+crn+'&semester='+semester+'&year='+year+"&callback=?", function(data) {
+    // //jQuery.getJSON('EssayAnswers.cshtml?crn=' + crn + '&semester=' + semester + '&year=' + year, function (data) {
+    //   console.log(data + '')
+    //     if (currentElement != element) {
+    //         return;
+    //     }
+    //     try {
+    //         var questionsAndResponses = [];
+    //
+    //         $.each(data.DATA, function (i, array) {
+    //             var dataArray = toKeyValPair(data.COLUMNS, String(array).split(','));	//CONVERTS DATA TO A KEY VALUE PAIR FOR READABILITY
+    //             if (!(dataArray['QUESTION'] in questionsAndResponses)) {
+    //                 questionsAndResponses[dataArray['QUESTION']] = [];
+    //             }
+    //             questionsAndResponses[dataArray['QUESTION']].push(dataArray['ANSWER']);
+    //
+    //         });
+    //
+    //
+    //         var eQuestions = "";
+    //         printQuestion = 0;
+    //         for (var question in questionsAndResponses) {
+    //             var tempArray = questionsAndResponses[question];
+    //             eQuestions += "<div class='question_box'><table class='essay_table_settings'><tr><td style='vertical-align:text-top; text-align:right'> <img class = 'question_image_box' src = 'images/colorItemBackground.png'> " + (printQuestion + 1) + ".  </td><td></td><td align='left'>" + question + "</td></tr>";
+    //
+    //             for (var responses = 0; responses < tempArray.length; responses++) {
+    //
+    //                 var noResponse = "";
+    //
+    //                 if (tempArray[responses] == "No Response") {
+    //
+    //                     noResponse = "font-style:italic";
+    //
+    //                 }
+    //                 eQuestions += "<tr><td style='font-weight:normal; vertical-align:text-bottom; text-align:right'>&nbsp;&nbsp;" + (responses + 1) + "</td><td align='right'></td><td align='left' class='essay_responses' style='" + noResponse + "'><pre>" + tempArray[responses] + "</pre></td></tr>";
+    //             }
+    //             eQuestions += "</table></div>";
+    //             printQuestion++;
+    //         }
+    //         $(element).find("#EssayWrapper").append(eQuestions);
+    //         essayQueryComplete(element, true);
+    //     }
+    //     catch (thrownError) {
+    //         essayQueryComplete(element, false);
+    //     }
+    // }, function (error) {
+    //   console.log(error)
+    //     essayQueryComplete(element, false);
+    // });
+}
+function essayQuery(element, crn, semester, year) {
+    jQuery.getJSON(urlStart + '/essayAnswers.cfm?crn='+crn+'&semester='+semester+'&year='+year, function(data) {
+    //jQuery.getJSON('EssayAnswers.cshtml?crn=' + crn + '&semester=' + semester + '&year=' + year, function (data) {
+      console.log(data)
         if (currentElement != element) {
             return;
         }
@@ -94,7 +157,7 @@ function essayQuery(element, crn, semester, year) {
             essayQueryComplete(element, false);
         }
     }, function (error) {
-
+      //console.log(error + 'error')
         essayQueryComplete(element, false);
     });
 }
@@ -104,8 +167,8 @@ function essayQuery(element, crn, semester, year) {
 function mainQuery(element, crn, semester, year) {
     $.ajax(
 	{
-	    //url: '/misc/weber/CSEvals/AnswerCount.cfm?crn='+crn+'&semester='+semester+'&year='+year,
-	    url: 'AnswerCount.cshtml?crn=' + crn + '&semester=' + semester + '&year=' + year,
+	    url: urlStart + '/AnswerCount.cfm?crn='+crn+'&semester='+semester+'&year='+year,
+	    //url: 'AnswerCount.cshtml?crn=' + crn + '&semester=' + semester + '&year=' + year,
 	    type: "GET",
 	    dataType: "json",
 	    success: function (data) {
@@ -268,8 +331,8 @@ function mainQuery(element, crn, semester, year) {
 function titleQuery(element, crn, semester, year) {
     $.ajax(
 	{
-	    //url: '/misc/weber/CSEvals/CrnDetails.cfm?crn='+crn+'&semester='+semester+'&year='+year,
-	    url: 'CrnDetails.cshtml?crn=' + crn + '&semester=' + semester + '&year=' + year,
+	    url: urlStart + '/CrnDetails.cfm?crn='+crn+'&semester='+semester+'&year='+year,
+	    //url: 'CrnDetails.cshtml?crn=' + crn + '&semester=' + semester + '&year=' + year,
 	    type: "GET",
 	    dataType: "json",
 	    success: function (data) {
@@ -322,8 +385,8 @@ function titleQuery(element, crn, semester, year) {
 function topQuery(element, crn, semester, year) {
     $(element).find("#StatisticsWrapper").hide();
 
-    //jQuery.getJSON('/misc/weber/CSEvals/CrnStatistics.cfm?crn='+crn+'&semester='+semester+'&year='+year, function(data) 
-    jQuery.getJSON('CrnStatistics.cshtml?crn=' + crn + '&semester=' + semester + '&year=' + year, function (data) {
+    //jQuery.getJSON('/misc/weber/CSEvals/CrnStatistics.cfm?crn='+crn+'&semester='+semester+'&year='+year, function(data)
+    jQuery.getJSON(urlStart + '/CrnStatistics.cfm?crn=' + crn + '&semester=' + semester + '&year=' + year, function (data) {
         if (currentElement != element) {
             return;
         }
@@ -408,8 +471,8 @@ function detailsTop(element, crn, semester, year, clickedButton) {
     }
     originalDiv.addClass("Already_Expanded");
     $(element).find("#top_detail").before('<p class="loadinggif">Calculating...</p></br><img class="loadinggif" src=".\\images\\ajax-loader.gif" "/>');
-    //jQuery.get('/misc/weber/CSEvals/CrnStatistics.cfm?crn='+crn+'&semester='+semester+'&year='+year, function(data) 
-    jQuery.get('CrnStatistics.cshtml?crn=' + crn + '&semester=' + semester + '&year=' + year, function (data) {
+    //jQuery.get('/misc/weber/CSEvals/CrnStatistics.cfm?crn='+crn+'&semester='+semester+'&year='+year, function(data)
+    jQuery.get(urlStart + '/CrnStatistics.cfm?crn=' + crn + '&semester=' + semester + '&year=' + year, function (data) {
         if (currentElement != element) {
             return;
         }
@@ -421,8 +484,8 @@ function detailsTop(element, crn, semester, year, clickedButton) {
         $.each(data.DATA, function (i, array) {
             var crnStatistics2 = toKeyValPair(data.COLUMNS, String(data.DATA).split(','));
 
-            //jQuery.get('/misc/weber/CSEvals/ScoreByCategory.cfm?crn='+crn+'&semester='+semester+'&year='+year, function(data2) 
-            jQuery.get('ScoreByCategory.cshtml?crn=' + crn + '&semester=' + semester + '&year=' + year, function (data2) {
+            //jQuery.get('/misc/weber/CSEvals/ScoreByCategory.cfm?crn='+crn+'&semester='+semester+'&year='+year, function(data2)
+            jQuery.get('ScoreByCategory.cfm?crn=' + crn + '&semester=' + semester + '&year=' + year, function (data2) {
                 statsTableString = statsTableString + ''
                 $.each(data2.DATA, function (i, array2) {
                     var questionNumList = array2[4].split(',');
@@ -579,7 +642,7 @@ function detailsQuery(element, crn, semester, year, questionId, clickedButton) {
     $.ajax(
 	{
 	    //url:("/misc/weber/CSEvals/QuestionDetails.cfm?crn="+crn+"&semester="+semester+"&year="+year+"&questionID="+questionId),
-	    url: ("QuestionDetails.cshtml?crn=" + crn + "&semester=" + semester + "&year=" + year + "&questionID=" + questionId),
+	    url: ("QuestionDetails.cfm?crn=" + crn + "&semester=" + semester + "&year=" + year + "&questionID=" + questionId),
 	    type: "GET",
 	    dataType: "json",
 	    success: function (data) {
@@ -870,7 +933,6 @@ function detailsQuery(element, crn, semester, year, questionId, clickedButton) {
 
 function getURLParameter(name) {
     return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.search) || [, ""])[1].replace(/\+/g, '%20')) || null;
-}
 function nextCrn() {
     if (currentCRNIndex < crnArray.length) {
         addToReport(crnArray[currentCRNIndex][0], crnArray[currentCRNIndex][1], crnArray[currentCRNIndex][2]);
@@ -881,7 +943,7 @@ function nextCrn() {
         // we completed it so turn off the loading status div
     else if (!window.complete) {
         complete = true;
-        
+
         $('#loadingstatus').remove();
 
         if (typeof (onReportComplete) === typeof (Function)) {
@@ -889,8 +951,8 @@ function nextCrn() {
 
         }
 
-        
-        
+
+
     }
 }
 function onErrorQueries(wrapperElement) {
@@ -1012,7 +1074,7 @@ function addToReport(CRN, Semester, Year) {
     var element = document.createElement('div');
     element.innerHTML = divHTML;
     document.body.appendChild(element);
-    element.id = "class" + CRN + "-" + Semester + "-" + Year;
+    element.id = "class" + CRN + "-" + Semester + "-" + Year ;
     element.crn = CRN;
     element.semesterNum = Semester;
     element.year = Year;
@@ -1103,5 +1165,3 @@ function loadCRNData(crnArray) {
     document.body.appendChild(loadingStatus);
     nextCrn();
 }
-
-

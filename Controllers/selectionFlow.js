@@ -2,7 +2,7 @@ var app = angular.module("EvalSystem", []);
 var termsSelected = []; // holds the terms that the user has selected
 var departmentsSelected = []; //holds the departments that the user has selected
 var coursesSelected = [];
-var courseOrInstructor = ""; //holds the string of "Course" or "Instructor" based on which option the user chooses to sort the returned info by
+var courseOrInstructor = ""; //holds the string of  "Course" or "Instructor" based on which option the user chooses to sort the returned info by
 var reportDisplayOption = "";
 
 // NOTE: This will need to be changed each semester to the path that the current group has set up for their API calls
@@ -94,7 +94,8 @@ app.controller("DeptController", function($scope, $http) {
             }
         }
 
-        console.log(departmentsSelected); //outputs the received data to the console (for debugging purposes only)
+        console.log(departmentsSelected);
+				console.log(termsSelected) //outputs the received data to the console (for debugging purposes only)
         document.getElementById('pane3-button').click(); //moves the view to the next window pane
     }
 });
@@ -176,7 +177,6 @@ app.controller("InstructorCourseController", function($scope, $http) {
 			.then(
 				function successCallback(response) {
 					console.log(response.data);
-					console.log('hi');
 					var courseNumbers = response.data;
 
 					// get the select we're going to add all our options to

@@ -8,6 +8,7 @@ function getURLParameter(name) {
 }
 
 function windowOnload(){
+  console.log('onload')
 
     instructorID = getURLParameter('instructorID');
     // download instructor crn's

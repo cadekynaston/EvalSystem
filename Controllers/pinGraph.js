@@ -124,11 +124,10 @@ function startGraph()
 				var course = data[i].course;
 				var instructor = data[i].teacher;
 				var score = parseFloat(data[i].Score);
-				console.log(score)
 				if (data[i].course == "") {course = 'Missing';}
 				if (data[i].teacher == "") {instructor = 'Missing';}
 
-
+				// colors are random because permissions havent been sorted out yet
 				if (tempColor == 0)
 				{
 					tempMarker = "red";
@@ -142,15 +141,13 @@ function startGraph()
 					tempMarker = "blue";
 				}
 
-
-				//assign info to an object with mock data
 				var tempObject = {
 					marker:tempMarker,
 					course:course,
 					instructor:instructor,
 					score:score,
 					year:data[i].calendarYear,
-					semester: data[i].semester};
+					semester: data[i].semesterNumber};
 
 				graphObjectArray.push(tempObject);
 			}
