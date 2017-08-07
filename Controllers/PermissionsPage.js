@@ -88,7 +88,13 @@ app.controller("RoleController", function ($scope, $http) {
     // on click remove role
     $scope.RemoveRole = function () {
         console.log("Remove Role Clicked");
-        rolesSelected.splice(indexSelected, 1); 
+        for (var i = 0; i < rolesSelected.length; i++) {
+            if (rolesSelected[i].RoleId == indexSelected) {
+                console.log("Removing index: "+i+" with RoleId: " +indexSelected)
+                rolesSelected.splice(i, 1);
+            }
+        }
+        //rolesSelected.splice(indexSelected, 1); 
         console.log(rolesSelected);
         $scope.roles = [];
         $scope.roles = rolesSelected;        
@@ -97,8 +103,7 @@ app.controller("RoleController", function ($scope, $http) {
     // change in role selected
     $scope.showSelectValue = function (roleListSelected) {
         indexSelected = roleListSelected;// cant figure out how to get indexOf() to work
-        console.log(indexSelected);
-
+        console.log(indexSelected);       
     }
 });
 
