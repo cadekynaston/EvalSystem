@@ -1,7 +1,5 @@
-
 .pinHead
 {
-
 	position: absolute;
 	z-index: 15;
 	left: 350px;
@@ -27,8 +25,7 @@
 	padding-left:30px;
 	padding-right:40px;
 }
-.container{
-	
+.container{	
 	border: 2px solid #000000;
 	background-color:#d9d9d9;
 	margin-top: 70px;
@@ -37,13 +34,12 @@
 	padding-bottom:5px;
 	position:absolute;
 	height:250px;
-	
 }
 .graph{
 	vertical-align: middle;
-position: absolute;
-top: 125px;
-left: 35px;
+	position: absolute;
+	top: 125px;
+	left: 35px;
 }
 .number{
 	float:left;

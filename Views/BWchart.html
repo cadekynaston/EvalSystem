@@ -6,14 +6,14 @@
   <link rel="stylesheet" type="text/css" href="../CSS/BWchart.css" />
   <script type="text/javascript" src="https://code.jquery.com/jquery-1.9.1.min.js"></script>
   <script type="text/javascript" src="https://code.jquery.com/jquery-latest.min.js"></script>
-  <script type="text/javascript" src="https://code.jquery.com/ui/1.10.3/jquery-ui.js"></script> 
+  <script type="text/javascript" src="https://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
   
   <script type="text/javascript" src="../Controllers/boxAndWhiskerChart.js"></script>
-    <!-- <script src="../Includes/slides.min.jquery.js"></script> -->
+    <script src="../Includes/slides.min.jquery.js"></script>
   
 </head>
 
-<body onload="startGraph();" >
+<body onload="startGraph();" >    
 
     <div id="page">
         <h2 style='margin:auto;text-align:center;'>Computer Science CS 1400 to CS 2400</h2>
@@ -32,9 +32,19 @@
                 <td><input type='image' src='../Images/Very-Basic-Plus-icon.png' width='20px' height='20px' onmousedown=zoomIn() onmouseup=endZoomIn() ondragend=endZoomIn() id='zoomin' /></td>
                 <td><input type='image' src='../Images/Very-Basic-Minus-icon.png' width='20px' height='20px' onmousedown=zoomOut() onmouseup=endZoomOut() ondragend=endZoomOut() id='zoomout' /></td>
                 <td><input type='image' src='../Images/Arrows-Back-greater-than.png' width='20px' height='20px' onmousedown=rightClick() onmouseup=endRightClick() ondragend=endRightClick() id='rightclick' /></td>
-
+           
             </tr>
         </table>
+
+        <!--use this area for the legend for the Quartile-->
+         <!-- <table align='center'>
+            <tr>
+                <td colspan='9' width='900px'>Legend:</td>
+                 <tr><td style='vertical-align:top'><img src='../Images/LegendSquare-Red.png' />Q1</td></tr>
+                <tr><td class='legendrow' style='vertical-align:top'><img src='../Images/LegendSquare-Green.png' />Median</td></tr>
+                <tr><td style='vertical-align:top'><img src='../Images/LegendSquare-Blue.png' />Q3</td></tr>
+            </tr>
+        </table>  -->
 <!--
     DID'T NEED THIS AT THIS TIME . LEGEND SQUARES
         <table align='center'>
@@ -47,7 +57,7 @@
             
         </table>-->
 
-        <!--<table id="tabularScores" style="margin-top:15px; margin-left:auto;margin-right:auto ">-->
+        <!--<table id="tabularScores" style="margin-top:15px; margin-left:auto;margin-right:auto ">
 
         </table>
     </div>
