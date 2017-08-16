@@ -21,6 +21,7 @@ var loggedInUserID = 887969243; // brad peterson
 app.controller("TermController", function($scope, $http) {
 	$http(
 		{
+
 			method: 'GET',
 			url:  apiPath + 'yearSemesters'
 		}
@@ -117,8 +118,8 @@ app.controller("InstructorCourseController", function($scope, $http) {
 
 
 
-		if(courseOrInstructor == "Course"){
-            document.getElementById("pane4-title").innerHTML = "Refine By Courses";
+		if(courseOrInstructor == "Instructor"){
+            document.getElementById("pane4-title").innerHTML = "Refine By Instructors";
 			let departmentsSelectedJSONString = "{";
 			departmentsSelectedJSONString += "\"departments\":" + JSON.stringify(departmentsSelected);
 			departmentsSelectedJSONString += ",\"userID\":" + loggedInUserID;
@@ -156,8 +157,8 @@ app.controller("InstructorCourseController", function($scope, $http) {
 				}
 			);
 		}
-		else if(courseOrInstructor == "Instructor"){
-            document.getElementById("pane4-title").innerHTML = "Refine By Instructors";
+		else if(courseOrInstructor == "Course"){
+            document.getElementById("pane4-title").innerHTML = "Refine By Courses";
 			let departmentsSelectedJSONString = "{";
 			departmentsSelectedJSONString += "\"departments\":" + JSON.stringify(departmentsSelected);
 			departmentsSelectedJSONString += "}";
@@ -236,6 +237,22 @@ function buildReport() {
 	switch (checkedChoice) {
 		case "term":
 		  console.log("You chose Sort per Term.")
+			var courseListString = "";
+			var courses = document.getElementById("ICList").options;
+
+			// strip out the information we need to get objects in the form of
+			// {code: 8001, name: Computer Science}
+
+			for(var i=0; i<courses.length; i++){
+					if(courses[i].selected){
+							courseListString += courses[i].value + ",";
+					}
+			}
+			
+			// seems to have issues in Edge, but we ran out of time
+			window.sessionStorage.coursesSelected = courseListString;
+			
+			window.location="BWchart.html";
 			break;
 		case "dept":
 			console.log("You chose Sort per Department.")
@@ -245,6 +262,24 @@ function buildReport() {
 			break;
 		case "allReports":
 			console.log("You chose All as Eval Reports.")
+			//////////////////////////////////////////////////////////////////////////replace all below
+			var courseListString = "";
+			var courses = document.getElementById("ICList").options;
+
+			// strip out the information we need to get objects in the form of
+			// {code: 8001, name: Computer Science}
+
+			for(var i=0; i<courses.length; i++){
+					if(courses[i].selected){
+							courseListString += courses[i].value + ",";
+					}
+			}
+			
+			// seems to have issues in Edge, but we ran out of time
+			window.sessionStorage.coursesSelected = courseListString;
+			
+			window.location="../Old/PromotionAndTenureWith2DGraph/PromotionTenureReport.html";
+			////////////////////////////////////////////////////////////////////////replace all above
 			break;
 		case "oneReport":
 			console.log("You chose All in One Report.")

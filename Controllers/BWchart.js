@@ -1,264 +1,739 @@
-var extData = null;
-var extSem = null;
-var extSemName = null;
-var label = "";
-/* change this labelgroupby value to change the groupings of the 2D graph. For instance changing labelgroupby to 
-    equal "teacher" will change the grouping to be by year and by teacher*/
-var labelgroupby = "crn";
+
+// this should be populated from the selectionFlow.
+// if this data was not submitted from the selectionFlow
+// we will redirect back so you can do it properly
+if(window.sessionStorage.coursesSelected){
+	var coursesToDisplay = window.sessionStorage.coursesSelected;
+}
+else{
+	var coursesToDisplay = null;
+	window.location = "selectionFlow.html";
+}
+
+console.log("You selected these courses: " + coursesToDisplay + "\n\n");
+
+console.log(`
+	This page is not finished, you need to make the pingraph
+	show the correct data from the specific courses selected
+
+	the API endpoint like:
+
+	https://icarus.cs.weber.edu/~nb06777/CS4450/v1/getPingraphData
+
+	with a body like
+
+		{
+			"courses" : ["CS2420","CS1400"],
+			"userID": 887969243
+		}
+		
+	will return all of the pingraph data for Brad Peterson to see
+	regarding these CS1400 and CS2420
+
+	in this format:
+
+	[
+		{"TestId":"69210","teacher":"Bradley Peterson","course":"CS2420","catalogYear":"2014","calendarYear":"2014","semester":"Fall","semesterNumber":"3","Score":"3.184523","permission":"2","bannerCRN":"32940","LikertMin":"0","LikertMax":"4"},
+		{"TestId":"69210","teacher":"Bradley Peterson","course":"CS2420","catalogYear":"2014","calendarYear":"2015","semester":"Spring","semesterNumber":"1","Score":"3.198391","permission":"2","bannerCRN":"11232","LikertMin":"0","LikertMax":"4"},
+		{"TestId":"69210","teacher":"Bradley Peterson","course":"CS2420","catalogYear":"2013","calendarYear":"2014","semester":"Summer","semesterNumber":"2","Score":"3.264705","permission":"2","bannerCRN":"23750","LikertMin":"0","LikertMax":"4"},
+		...
+		trimmed for space
+		...
+		{"TestId":"69210","teacher":"Bradley Peterson","course":"CS2420","catalogYear":"2013","calendarYear":"2014","semester":"Summer","semesterNumber":"2","Score":"3.714285","permission":"2","bannerCRN":"20949","LikertMin":"0","LikertMax":"4"},
+		{"TestId":"69210","teacher":"Bradley Peterson","course":"CS2420","catalogYear":"2014","calendarYear":"2015","semester":"Summer","semesterNumber":"2","Score":"3.830449","permission":"2","bannerCRN":"21584","LikertMin":"0","LikertMax":"4"}
+	]
+	
+	
+	
+	At the moment it generates a bunch of random data in a for loop.  
+	The attempted AJAX call is commented out.
+`);
+
+// this is hard coded for now but should be changed to
+// however chitester handles who is logged in currently
+var loggedInUser = 887969243; // this is brad peterson
 
 
-function labelContainer(pinobject, grouptype) {
-    switch (grouptype) {
-    case "className":
-        return pinobject.year + " - " + pinobject.className;
+var leftBound =  0.00;
+var rightBound = 4.00;
 
-    case "teacher":
-        return pinobject.year + " - " + pinobject.instructor;
+var leftScale = 0.00;
+var rightScale = 4.00;
+var graphObjectArray = new Array();
+var tableSort = "";
+var tableData = null;
 
-    case "semester":
-        return pinobject.year + ' - ' + pinobject.semesterName
+function toKeyValPair(names, values)
+{
+	var result = {};
+	for(var i = 0; i < names.length; i++)
+	{
+		result[names[i]] = values[i];
+	}
+	return result;
+}
+function sortColors(a,b)
+{
+    var colorValueA = getColorValue(a[1]);
+    var colorValueB = getColorValue(b[1]);
+
+    return colorValueA - colorValueB;
+
+}
+
+
+function getColorZIndex(color)
+{
+    if (color === "red") {
+        return 40;
+    }
+    else if (color === "green") {
+        return 25;
+    }
+
+    else {
+        return 15;
+    }
+}
+
+function startGraph()
+{
+	if(coursesToDisplay){
+		//$.ajax(
+		//{
+		//    //url: '/misc/weber/CSEvals/ranking.cfm',
+		//    url: 'Ranking.cshtml?instructorID=887999808&semester=2&year=2014',
+		//	type: "GET",
+		//	dataType: "json",
+		//	success:function(data)
+		//	{
+		//		var dataArray;
+		//		var tableObject;
+
+		//		$.each(data.DATA, function(i, array)
+		//		{
+		//			dataArray = toKeyValPair(data.COLUMNS, array);	//CONVERTS DATA TO A KEY VALUE PAIR FOR READABILITY
+		//			tableObject = {marker:dataArray["MARKER"], course:dataArray["COURSE"], instructor:dataArray["INAME"], score:dataArray["INSTRUCTORAVERAGE"], semester:dataArray["SEMESTER"],year:dataArray["YEAR"]};
+		//			graphObjectArray.push(tableObject);
+		//		});
+
+		//		graphObjectArray.sort(function (a, b) {
+		//		    return a.score - b.score;
+		//		})
+
+		//		barGraph();
+
+		//		tableData = graphObjectArray;
+
+		//		graphObjectArray.sort(function (a, b) {
+		//		    return b.score - a.score;
+		//		});
+		//		generateScoreTable(graphObjectArray);
+		//	}
+		//});
+
+		//var graphObjectArray = new Array();//[graphObject, graphObject2, graphObject3, graphObject4, graphObject5, graphObject6, graphObject7, graphObject8, graphObject9];
+		
+		//generate random markers to use as mock data. 
+		 for (var i = 0; i < 200; i++)
+		 {
+			 var tempScore = (Math.random() * 4);
+			 var tempMarker;
+			
+			 var tempColor = (Math.random() * 50).toFixed(0);
+
+			 var semester = Math.floor((Math.random() * 3)) + 1;
+			 var year = Math.floor((Math.random() * 5)) + 2013;
+			
+			 if (tempColor == 0)
+			 {
+				 tempMarker = "red";
+			 }
+			 else if (tempColor == 1)
+			 {
+				 tempMarker = "green";
+			 }
+			 else if (tempColor >= 2)
+			 {
+				 tempMarker = "blue";
+			 }
+			
+
+			 //assign info to an object with mock data
+			 var tempObject = {marker:tempMarker, course:"CS 1400", instructor:"Brad Peterson", score:tempScore, year:year, semester: semester};
+			 graphObjectArray.push(tempObject);
+		 }
+		
+		graphObjectArray.sort(function (a, b) {
+			return a.score - b.score
+		})
+		tableData = graphObjectArray;
+		barGraph();
+
+		generateScoreTable(tableData);
+	}
+	
+	else{
+		console.log("You did not come to this page via the selectionFlow.html page.  Please go back and do this properly.");
+	}
+	
+
+}
+
+
+function barGraph()
+{
+
+	//MAIN TABLE AND FIRST SELECTION OF DATA
+	createResults();	
+	
+}
+//Function that puts the graph results on the bar graph
+function createResults()
+{
+    var html = "";
+    var mainRow = document.getElementById('mainrow');
+    //html += "<tr id = 'mainrow' align = 'center'><td colspan = '9' width = '900px' >";
+    html += "<td colspan = '9' width = '900px' >";
+    html += "<img src='../Images/blackbar.png' style='padding-left: 7px;' height = '55%' width='100%' id='graphimage'>";
+	
+	var startIndex = 0;	//START THE NUMBER LINE
+
+	html += "<div id='graphData' style = 'position:relative;'>";
+
+	var top = -99;
+	var zindex = 15;
+	
+	for (var i = leftBound; i <= rightBound; i = i + .5)
+	{
+	    html += "<img style='position: absolute; z-index: " + zindex + "; left:" + (((((i - leftBound) * 225) / 900) * 100) * (4 / (rightBound - leftBound))) + "%; top: " + (top + 40) + "px;' src = '../Images/blacktick.png'>";
+	}
+	
+	html += "</div></td>";
+
+
+	mainRow.innerHTML = html;
+	html = "";
+
+	var graphData = document.getElementById('graphData');
+
+	for(i = 0; i < graphObjectArray.length; i++)
+	{
+	    var color = graphObjectArray[i].marker;
+
+	    zindex = getColorZIndex(color);
+
+		if (i != 0)
+		{
+		    
+
+
+		    if (graphObjectArray[i - 1]["score"] == graphObjectArray[i]["score"])
+			{
+				top -= 8;
+				zindex -= 1;
+			}
+			else
+			{
+				top = -99;
+		        //zindex = 15;
+				zindex = getColorZIndex(color);
+			}
+		}
+		var semester = null;
+		var year = null;
+
+		if (graphObjectArray[i].semester != null && graphObjectArray[i].year != null)
+		{
+		    var semesterNum = parseInt(graphObjectArray[i].semester);
+		    year = parseInt(graphObjectArray[i].year);
+		    switch (semesterNum)
+		    {
+		        case 1:
+		            semester = "Summer";
+		            year--;
+		            break;
+		        case 2:
+		            semester = "Fall";
+		            year--;
+		            break;
+		        case 3:
+		            semester = "Spring";
+		            break;
+		    }
+		    
+
+		}
+
+
+		if (graphObjectArray[i]["score"] >= leftBound && graphObjectArray[i]["score"] <= rightBound)
+		{
+			if (graphObjectArray[i]["marker"] == "red")
+			{
+			    if (graphObjectArray[i].semester != null && graphObjectArray[i].year != null)
+			    {
+			        graphData.innerHTML += "<img style='position: absolute; z-index: " + zindex + "; left:" + (((((graphObjectArray[i]["score"] - leftBound) * 225) / 900) * 100) * (4 / (rightBound - leftBound))) + "%; top: " + top + "px;'  title='" + graphObjectArray[i]["instructor"] + " - " + graphObjectArray[i]["course"] + " - " + semester + " " + year + ": " + graphObjectArray[i]["score"] + "' src = '../Images/RedPinSmall.png'>";
+			    }
+			    else
+			    {
+
+			        graphData.innerHTML += "<img style='position: absolute; z-index: " + zindex + "; left:" + (((((graphObjectArray[i]["score"] - leftBound) * 225) / 900) * 100) * (4 / (rightBound - leftBound))) + "%; top: " + top + "px;'  title='" + graphObjectArray[i]["instructor"] + " - " + graphObjectArray[i]["course"] + ": " + graphObjectArray[i]["score"] + "' src = '../Images/RedPinSmall.png'>";
+			    }
+			    
+			}
+			else if (graphObjectArray[i]["marker"] == "green")
+			{
+			    if (graphObjectArray[i].semester != null && graphObjectArray[i].year != null)
+			    {
+			        graphData.innerHTML += "<img style='position: absolute; z-index: " + zindex + "; left:" + (((((graphObjectArray[i]["score"] - leftBound) * 225) / 900) * 100) * (4 / (rightBound - leftBound))) + "%; top: " + top + "px;'  title='" + graphObjectArray[i]["instructor"] + " - " + graphObjectArray[i]["course"] + " - " + semester + " " + year + ": " + graphObjectArray[i]["score"] + "' src = '../Images/GreenPinSmall.png'>";
+			    }
+			    else
+			    {
+			        graphData.innerHTML += "<img style='position: absolute; z-index: " + zindex + "; left:" + (((((graphObjectArray[i]["score"] - leftBound) * 225) / 900) * 100) * (4 / (rightBound - leftBound))) + "%; top: " + top + "px;'  title='" + graphObjectArray[i]["instructor"] + " - " + graphObjectArray[i]["course"] + ": " + graphObjectArray[i]["score"] + "' src = '../Images/GreenPinSmall.png'>";
+			    }
+			    
+			}
+			else if (graphObjectArray[i]["marker"] == "blue")
+			{
+			    if (graphObjectArray[i].semester != null && graphObjectArray[i].year != null)
+			    {
+			        graphData.innerHTML += "<img style='position: absolute; z-index: " + zindex + "; left:" + (((((graphObjectArray[i]["score"] - leftBound) * 225) / 900) * 100) * (4 / (rightBound - leftBound))) + "%; top: " + top + "px;'  title='" + graphObjectArray[i]["instructor"] + " - " + graphObjectArray[i]["course"] + " - " + semester + " " + year + ": " + graphObjectArray[i]["score"] + "' src = '../Images/BluePinSmall.png'>";
+			    }
+			    else
+			    {
+			        graphData.innerHTML += "<img style='position: absolute; z-index: " + zindex + "; left:" + (((((graphObjectArray[i]["score"] - leftBound) * 225) / 900) * 100) * (4 / (rightBound - leftBound))) + "%; top: " + top + "px;'  title='" + graphObjectArray[i]["instructor"] + " - " + graphObjectArray[i]["course"] + ": " + graphObjectArray[i]["score"] + "' src = '../Images/BluePinSmall.png'>";
+			    }
+			    
+			}
+		}
+	}
+	
+	var top2 = -103;
+	
+	//CALCULATE AND POSITION LEFTMOST DATAPOINT ("LOW")
+	if (graphObjectArray[0]["score"] >= leftBound && graphObjectArray[0]["score"] <= rightBound)
+	{
+	    graphData.innerHTML += "<img style='position: absolute;	left:" + (((((graphObjectArray[0]["score"] - leftBound) * 225) / 900) * 100) * (4 / (rightBound - leftBound))) + "%; top:" + (top2 + 70) + "px;'  title='Low Score' src = '../Images/PointPinSmall.png'>";
+	    graphData.innerHTML += "<div id = 'lowLabel' style='position: absolute; left:" + ((((((graphObjectArray[0]["score"] - leftBound) * 225) / 900) * 100) * (4 / (rightBound - leftBound))) - (2.5)) + "%; top:" + (top2 + 140) + "px;'>Low</div>";
+	}
+		
+	//CALCULATE AND POSITION RIGHTMOST DATAPOINT ("HIGH")
+	if (graphObjectArray[graphObjectArray.length - 1]["score"] >= leftBound && graphObjectArray[graphObjectArray.length - 1]["score"] <= rightBound)
+	{
+	    graphData.innerHTML += "<img style='position: absolute;	left:" + (((((graphObjectArray[graphObjectArray.length - 1]["score"] - leftBound) * 225) / 900) * 100) * (4 / (rightBound - leftBound))) + "%; top:" + (top2 + 70) + "px;'  title='High Score' src = '../Images/PointPinSmall.png'>";
+	    graphData.innerHTML += "<div id = 'highLabel' style='position: absolute; left:" + (((((graphObjectArray[graphObjectArray.length - 1]["score"] - leftBound) * 225) / 900) * 100) * (4 / (rightBound - leftBound)) + (1.0)) + "%; top:" + (top2 + 140) + "px;'>High</div>";
+	}
+		
+	//CALCULATE AND POSITION MIDDLEMOST DATAPOINT ("MEDIAN")
+	var median = 0.0;
+	if (graphObjectArray.length %2 == 0)
+	{
+		median = (parseFloat(graphObjectArray[(graphObjectArray.length / 2)]["score"]) + parseFloat(graphObjectArray[((graphObjectArray.length / 2) - 1)]["score"])) / 2;
+	}
+	else
+	{
+		median = graphObjectArray[parseInt((graphObjectArray.length / 2) - .5)]["score"];
+	}
+	
+	if (median >= leftBound && median <= rightBound)
+	{
+	    graphData.innerHTML += "<img id = 'medImage' style='position: absolute;	left:" + (((((median - leftBound) * 225) / 900) * 100) * (4 / (rightBound - leftBound))) + "%; top:" + (top2 + 70) + "px;'  title='Median' src = '../Images/PointPinSmall.png'>";
+		if ((document.getElementById('medImage').offsetLeft - document.getElementById('lowLabel').offsetLeft < 40) || (document.getElementById('highLabel').offsetLeft - document.getElementById('medImage').offsetLeft < 40))
+		    graphData.innerHTML += "<div style='position: absolute; left:" + (((((median * 225) / 900) * 100) * (4 / (rightBound - leftBound))) - 1.7) + "%; top:" + (top2 + 160) + "px; text-align:center'>Median</div>";
+		else
+		    graphData.innerHTML += "<div style='position: absolute; left:" + (((((median * 225) / 900) * 100) * (4 / (rightBound - leftBound))) - 1.7) + "%; top:" + (top2 + 140) + "px; text-align:center'>Median</div>";
+	}
+	
+	//GENERATE NUMBER LINE
+	for (var i = leftBound; i <= rightBound ; i = i + .5)
+	{
+	    graphData.innerHTML += "<div style = 'position: absolute; top:0px; left:" + (((((i - leftBound) * 225) / 900) * 100) * (4 / (rightBound - leftBound))) + "%;'>" + (startIndex + i).toFixed(1) + "</div>";
+	}
+
+	//graphData.innerHTML = html;
+    //return html;
+
+}
+
+
+
+
+function leftClickAction()
+{
+	if (leftBound  >= leftScale - .01)
+	{
+		leftBound = leftBound - .01
+		rightBound = rightBound - .01
+		var row = document.getElementById("mainrow");
+		row.innerHTML = regenerate();
+	}
+}
+
+function leftClick()
+{
+	leftClickAction();
+	action_timeout = setInterval("leftClickAction()",25);
+}
+
+function endLeftClick()
+{
+	if (typeof(action_timeout) != "undefined") clearTimeout(action_timeout);
+}
+
+
+
+
+function rightClickAction()
+{
+	if (rightBound <= rightScale + .01)
+	{
+		leftBound = leftBound + .01;
+		rightBound = rightBound + .01;
+		var row = document.getElementById("mainrow");
+		row.innerHTML = regenerate();
+	}
+}
+
+function rightClick()
+{
+	rightClickAction();
+	action_timeout = setInterval("rightClickAction()",25);
+}
+
+function endRightClick()
+{
+	if (typeof(action_timeout) != "undefined") clearTimeout(action_timeout);
+}
+
+
+
+
+
+
+function zoomOutAction()
+{
+	if (rightBound - leftBound < rightScale - leftScale)
+	{
+		leftBound = leftBound - .01;
+		rightBound = rightBound + .01;
+
+		var row = document.getElementById("mainrow");
+		row.innerHTML = regenerate();
+	}
+}
+
+function zoomOut()
+{
+	zoomOutAction();
+	action_timeout = setInterval("zoomOutAction()",25);
+}
+
+function endZoomOut()
+{
+	if (typeof(action_timeout) != "undefined") clearTimeout(action_timeout);
+}
+
+
+
+function zoomInAction()
+{
+	if (rightBound - leftBound > 0.05)
+	{
+		leftBound = leftBound + .01;
+		rightBound = rightBound - .01;
+		var row = document.getElementById("mainrow");
+		row.innerHTML = regenerate();
+	}
+}
+
+function zoomIn()
+{
+	zoomInAction();
+	action_timeout = setInterval("zoomInAction()",25);
+}
+
+function endZoomIn()
+{
+	if (typeof(action_timeout) != "undefined") clearTimeout(action_timeout);
+}
+
+
+function regenerate()
+{
+	
+	var newChart = "";
+	
+	newChart += ""
+	
+	newChart += "<tr align = 'center'><td colspan = '9' width = '900px' >";
+
+	newChart += "<img src='../Images/blackbar.png' style='padding-left: 7px;' height = '55%' width='100%' id='graphimage2'>";
+	
+	//var tablePos = document.getElementById('graphimage2');
+	
+	var startIndex = 0;	//START THE NUMBER LINE
+
+	newChart += "<div style = 'position:relative;'>";
+		var top = -99;
+		var zindex = 15;
+	
+	
+	for (var i = leftScale; i <= rightScale ; i = i + .5)
+	{
+		if (i >= leftBound && i <= rightBound)
+			newChart += "<img style='position: absolute; z-index: " + zindex + "; left:" + (((((i - leftBound) * 225) / 900) * 100) * (4 / (rightBound - leftBound))) + "%; top: " + (top + 40) + "px;' src = '../Images/blacktick.png'>";
+	}
+	
+	for(i = 0; i < graphObjectArray.length; i++)
+	{
+	    var color = graphObjectArray[i].marker;
+	    zindex = getColorZIndex(color);
+
+		if (i != 0)
+		{
+			if (graphObjectArray[i - 1]["score"] == graphObjectArray[i]["score"])
+			{
+				top -= 8;
+				zindex -= 1;
+			}
+			else
+			{
+				top = -99;
+				zindex = 15;
+				zindex = getColorZIndex(color);
+			}
+		}
+		var semester = null;
+		var year = null;
+
+		if (graphObjectArray[i].semester != null && graphObjectArray[i].year != null) {
+		    var semesterNum = parseInt(graphObjectArray[i].semester);
+		    year = parseInt(graphObjectArray[i].year);
+		    switch (semesterNum) {
+		        case 1:
+		            semester = "Summer";
+		            year--;
+		            break;
+		        case 2:
+		            semester = "Fall";
+		            year--;
+		            break;
+		        case 3:
+		            semester = "Spring";
+		            break;
+		    }
+
+
+		}
+
+		if (graphObjectArray[i]["score"] >= leftBound && graphObjectArray[i]["score"] <= rightBound)
+		{
+			if (graphObjectArray[i]["marker"] == "red")
+			{
+			    if (graphObjectArray[i].semester != null && graphObjectArray[i].year != null)
+			    {
+			        newChart += "<img style='position: absolute; z-index: " + zindex + "; left:" + (((((graphObjectArray[i]["score"] - leftBound) * 225) / 900) * 100) * (4 / (rightBound - leftBound))) + "%; top: " + top + "px;'  title='" + graphObjectArray[i]["instructor"] + " - " + graphObjectArray[i]["course"] + " - " + semester + " " + year + ": " + graphObjectArray[i]["score"] + "' src = '../Images/RedPinSmall.png'>";
+			    }
+			    else {
+			        newChart += "<img style='position: absolute; z-index: " + zindex + "; left:" + (((((graphObjectArray[i]["score"] - leftBound) * 225) / 900) * 100) * (4 / (rightBound - leftBound))) + "%; top: " + top + "px;'  title='" + graphObjectArray[i]["instructor"] + " - " + graphObjectArray[i]["course"] + ": " + graphObjectArray[i]["score"] + "' src = '../Images/RedPinSmall.png'>";
+			    }
+				
+			}
+			else if (graphObjectArray[i]["marker"] == "green")
+			{
+			    if (graphObjectArray[i].semester != null && graphObjectArray[i].year != null)
+			    {
+			        newChart += "<img style='position: absolute; z-index: " + zindex + "; left:" + (((((graphObjectArray[i]["score"] - leftBound) * 225) / 900) * 100) * (4 / (rightBound - leftBound))) + "%; top: " + top + "px;'  title='" + graphObjectArray[i]["instructor"] + " - " + graphObjectArray[i]["course"] + " - " + semester + " " + year + ": " + graphObjectArray[i]["score"] + "' src = '../Images/GreenPinSmall.png'>";
+			    }
+			    else
+			    {
+			        newChart += "<img style='position: absolute; z-index: " + zindex + "; left:" + (((((graphObjectArray[i]["score"] - leftBound) * 225) / 900) * 100) * (4 / (rightBound - leftBound))) + "%; top: " + top + "px;'  title='" + graphObjectArray[i]["instructor"] + " - " + graphObjectArray[i]["course"] + ": " + graphObjectArray[i]["score"] + "' src = '../Images/GreenPinSmall.png'>";
+			    }
+				
+			}
+			else if (graphObjectArray[i]["marker"] == "blue")
+			{
+			    if (graphObjectArray[i].semester != null && graphObjectArray[i].year != null)
+			    {
+			        newChart += "<img style='position: absolute; z-index: " + zindex + "; left:" + (((((graphObjectArray[i]["score"] - leftBound) * 225) / 900) * 100) * (4 / (rightBound - leftBound))) + "%; top: " + top + "px;'  title='" + graphObjectArray[i]["instructor"] + " - " + graphObjectArray[i]["course"] + " - " + semester + " " + year + ": " + graphObjectArray[i]["score"] + "' src = '../Images/BluePinSmall.png'>";
+			    }
+			    else {
+			        newChart += "<img style='position: absolute; z-index: " + zindex + "; left:" + (((((graphObjectArray[i]["score"] - leftBound) * 225) / 900) * 100) * (4 / (rightBound - leftBound))) + "%; top: " + top + "px;'  title='" + graphObjectArray[i]["instructor"] + " - " + graphObjectArray[i]["course"] + ": " + graphObjectArray[i]["score"] + "' src = '../Images/BluePinSmall.png'>";
+			    }
+				
+			}
+		}
+	}
+
+	
+	var top2 = -103;
+	
+	//CALCULATE AND POSITION LEFTMOST DATAPOINT ("LOW")
+	if (graphObjectArray[0]["score"] >= leftBound && graphObjectArray[0]["score"] <= rightBound)
+	{
+		newChart+="<img style='position: absolute;	left:" + (((((graphObjectArray[0]["score"] - leftBound) * 225) / 900) * 100) * (4 / (rightBound - leftBound))) + "%; top:" + (top2 + 70) + "px;'  title='Low Score' src = '../Images/PointPinSmall.png'>";
+		newChart+="<div id = 'lowLabel' style='position: absolute; left:" + ((((((graphObjectArray[0]["score"] - leftBound) * 225) / 900) * 100) * (4 / (rightBound - leftBound))) - (2.5)) +  "%; top:" + (top2 + 140) + "px;'>Low</div>";
+	}
+		
+	//CALCULATE AND POSITION RIGHTMOST DATAPOINT ("HIGH")
+	if (graphObjectArray[graphObjectArray.length - 1]["score"] >= leftBound && graphObjectArray[graphObjectArray.length - 1]["score"] <= rightBound)
+	{
+		newChart+="<img style='position: absolute;	left:"  + (((((graphObjectArray[graphObjectArray.length - 1]["score"] - leftBound) * 225) / 900) * 100) * (4 / (rightBound - leftBound)))+ "%; top:" + (top2 + 70) + "px;'  title='High Score' src = '../Images/PointPinSmall.png'>";
+		newChart+="<div id = 'highLabel' style='position: absolute; left:"  + (((((graphObjectArray[graphObjectArray.length - 1]["score"] - leftBound) * 225) / 900) * 100) * (4 / (rightBound - leftBound)) + (1.0)) + "%; top:" + (top2 + 140) + "px;'>High</div>";
+	}
+		
+	//CALCULATE AND POSITION MIDDLEMOST DATAPOINT ("MEDIAN")
+	var median = 0.0;
+	if (graphObjectArray.length %2 == 0)
+	{
+		median = (parseFloat(graphObjectArray[(graphObjectArray.length / 2)]["score"]) + parseFloat(graphObjectArray[((graphObjectArray.length / 2) - 1)]["score"])) / 2;
+	}
+	else
+	{
+		median = graphObjectArray[parseInt((graphObjectArray.length / 2) - .5)]["score"];
+	}
+	
+	
+	if (median >= leftBound && median <= rightBound)
+	{
+		newChart+="<img id = 'medImage' style='position: absolute;	left:" + (((((median - leftBound) * 225) / 900) * 100) * (4 / (rightBound - leftBound))) + "%; top:" + (top2 + 70) + "px;'  title='Median' src = '../Images/PointPinSmall.png'>";
+		newChart+="<div style='position: absolute; left:" + ((((((median - leftBound) * 225) / 900) * 100) * (4 / (rightBound - leftBound))) - 1.7) + "%; top:" + (top2 + 140) + "px; text-align:center'>Median</div>";
+	}
+	
+
+	
+	for (var i = leftScale; i <= rightScale ; i = i + .5)
+	{
+		if (i >= leftBound && i <= rightBound)
+			newChart+="<div style = 'position: absolute; top:0px; left:" + (((((i - leftBound) * 225) / 900) * 100) * (4 / (rightBound - leftBound))) + "%;'>" + nearestHalf(startIndex + i).toFixed(1) + "</div>";
+	}
+	
+	
+	return newChart;
+	
+}	
+
+
+function nearestHalf(value)
+{
+	value = Math.round(value * 2) / 2
+	return value
+}
+
+
+function generateScoreTable(scoreArray)
+{
+    var table = document.getElementById('tabularScores');
+    table.innerHTML = "";
+    
+
+    if(!table)
+    {
+        return;
+    }
+
+    
+    var html = "";
+
+    html += "<tr>";
+    html += "<th class='sortableHeader' onclick='setTimeout(0,sortKey());'>Key</th>"
+    html += "<th class='sortableHeader' onclick='setTimeout(0,sortClassName());'>Class</th>";
+    html += "<th class='sortableHeader' onclick='setTimeout(0,sortInstructor());'>Instructor</th>";
+    html += "<th class='sortableHeader' onclick='setTimeout(0,sortSemester());'>Semester</th>";
+    html += "<th class='sortableHeader' onclick='setTimeout(0,sortScore());'>Score</th>";
+    html += "</tr>";
+
+    for (var i = 0; i < scoreArray.length; i++)
+    {
+        var semester = "";
+        var semesterNum = parseInt(scoreArray[i].semester);
+        year = parseInt(scoreArray[i].year);
+        switch (semesterNum) {
+            case 1:
+                semester = "Summer";
+                year--;
+                break;
+            case 2:
+                semester = "Fall";
+                year--;
+                break;
+            case 3:
+                semester = "Spring";
+                break;
+        }
+
+
+        html += "<tr>";
+        html += "<td style=background-color:" + scoreArray[i].marker +"></td>";
+        html += "<td>" + scoreArray[i].course + "</td>";
+        html += "<td>" + scoreArray[i].instructor + "</td>";
+        html += "<td>" + semester + " " + year + "</td>";
+        html += "<td>" + scoreArray[i].score.toFixed(2) + "</td>";
+    }
+
+
+
+    table.innerHTML += html;
         
-    case "score":            
-        return pinobject.year + ' - ' + pinobject.score;
-            
-    default:
-        return pinobject.year + " - " + pinobject.semesterName;
-    }
-};
-
-google.load("visualization", "1.1", {
-    packages: ["corechart"]
-});
-//Setup and Calculate the info based on the input data.
-function loadChart(chartData) {
-    //parse the Chart Data into Semesters
-    var semesterLabels = [];
-
-    semesterLabels = getLabels(chartData);
-
-    semesterLabels.forEach(function (semester) {
-        var semesterEvals = [];
-        chartData.forEach(function (eval) {
-
-            if (semester == labelContainer(eval, labelgroupby)) {
-                console.log(eval.score);
-                semesterEvals.push(eval);
-            }
-        });
-        console.log("Semester Evan Num: " + semesterEvals.length);
-        // if this semesters evals is greater than 10 then do a whiskar graph, if the num of evals is less than ten then do a dot graph.
-        extSemName = semester;
-        extSem = semester.replace(/[-:\s]/g, '');
-        var jSem = $("#chart_div").append('<div id=' + extSem + ' class="singleSemester">&nbsp;</div>');
-
-        if (semesterEvals.length > 10) {
-            console.log("chose Whiskar chart");
-            extData = CompileChartData(chartData);
-            google.setOnLoadCallback(drawChart());
-        } else {
-            console.log("chose scatter chart");
-            extData = chartData;
-            google.setOnLoadCallback(drawScatter());
-        }
-    });
 }
 
-function drawScatter() {
-    var evallength = 10;
-    var data = new google.visualization.DataTable();
-    data.addColumn('string', 'Semester Name');
+function sortScore()
+{
+    tableData.sort(function (a, b) {
 
-    extData.forEach(function (eval) {
-        if (extSemName == labelContainer(eval, labelgroupby)) {
-            data.addColumn('number', eval.className)
-            data.addColumn({
-                type: 'string',
-                label: 'Probe Details',
-                role: 'tooltip',
-                'p': {
-                    'html': true
-                }
-            })
-        }
-    });
-    var semester = [];
-    extData.forEach(function (eval) {
-        if (extSemName == labelContainer(eval, labelgroupby)) {
-            if (typeof eval.score == 'string') {
-                eval.score = parseFloat(eval.score);
-            }
-            semester.push(eval.score);
-            var tooltipText =
-                'CRN: ' + eval.crn + '<br>' +
-                'Class Name: ' + eval.className + '<br>' +
-                'Score: ' + eval.score.toFixed(2) + '<br>' +
-                'Std. Dev: ' + Number(eval.stddev).toFixed(2) + '<br>' +
-                'Num Respondents: ' + eval.totalRespondents;
-            semester.push(tooltipText)
-        }
+        return b.score - a.score;
     });
 
-
-    semester.unshift(extSemName);
-    data.addRow(semester);
-
-    var options = {
-        legend: 'none',
-        orientation: 'vertical',
-        colors: ['blue'],
-        vAxis: {
-            gridlines: {
-                count: 3
-            }
-        },
-        chartArea: {
-            left: 100,
-        },
-        tooltip: {
-            isHtml: true
-        }
-    };
-
-    var chart = new google.visualization.ScatterChart(document.getElementById(extSem));
-    chart.draw(data, options);
-
-    google.visualization.events.addListener(chart, 'select', selectHandler);
-
-    function selectHandler() {
-        var selection = chart.getSelection();
-        var message = '';
-        for (var i = 0; i < selection.length; i++) {
-            var item = selection[i];
-            if (item.row != null && item.column != null) {
-                var str = data.getFormattedValue(item.row, item.column);
-                message += '{row:' + item.row + ',column:' + item.column + '} = ' + str + '\n';
-            } else if (item.row != null) {
-                var str = data.getFormattedValue(item.row, 0);
-                message += '{row:' + item.row + ', column:none}; value (col 0) = ' + str + '\n';
-            } else if (item.column != null) {
-                var str = data.getFormattedValue(0, item.column);
-                message += '{row:none, column:' + item.column + '}; value (row 0) = ' + str + '\n';
-            }
-        }
-        if (message == '') {
-            message = 'nothing';
-        }
-        alert('You selected ' + message);
-    }
-
-
-    /*document.getElementById('format-select').onchange = function() {
-      options['vAxis']['format'] = this.value;
-      chart.draw(data, options);
-    };*/
-};
-
-//Render the chart with the data for more than 10 items.
-function drawChart() {
-    var data = google.visualization.arrayToDataTable(extData, true);
-    var options = {
-        legend: 'none',
-        orientation: 'vertical',
-        chartArea: {
-            left: 100,
-        },
-        tooltip: {
-            isHtml: true,
-            trigger: 'selection'
-        },
-    };
-    var chart = new google.visualization.CandlestickChart(document.getElementById(extSem));
-    chart.draw(data, options);
+    generateScoreTable(tableData);
 }
 
-//Compile Chart Data when there is more than 10 items
-function CompileChartData(objArray) {
+function sortInstructor()
+{
+    tableData.sort(function (a, b) {
 
-    var labelArray = getLabels(objArray);
-
-    //var dataArray = new Array(labelArray.length);
-    // take a single label and get the list of data associated with it.
-    // when you do then you will return an array with min/max and quartiles.
-
-    function returnQuartiles(needle, array) {
-        var label;
-        var scoreList = [];
-        array.forEach(function (eval) {
-            label = eval.year + " - " + eval.semesterName;
-            if (label == needle) {
-                if (typeof eval.score == 'string') {
-                    eval.score = parseFloat(eval.score);
-                }
-                scoreList.push(eval.score);
-            }
-        });
-        scoreList.sort();
-        var q1Arr = (scoreList.length % 2 == 0) ? scoreList.slice(0, (scoreList.length / 2)) : scoreList.slice(0, Math.floor(scoreList.length / 2));
-        var q2Arr = scoreList;
-        var q3Arr = (scoreList.length % 2 == 0) ? scoreList.slice((scoreList.length / 2), scoreList.length) : scoreList.slice(Math.ceil(scoreList.length / 2), scoreList.length);
-        var min = scoreList[0];
-        var Q1 = medianX(q1Arr);
-        var Q3 = medianX(q3Arr);
-        var max = scoreList[scoreList.length - 1];
-
-        function medianX(medianArr) {
-            count = medianArr.length;
-            median = (count % 2 == 0) ? (medianArr[(medianArr.length / 2) - 1] + medianArr[(medianArr.length / 2)]) / 2 : medianArr[Math.floor(medianArr.length / 2)];
-            return median;
-        }
-        var chartData = [needle, min, Q1, Q3, max];
-        return chartData;
-    }
-
-
-    // For each label, take and compile min max and quartiles;
-    var chartData = [];
-
-    var semesterData = returnQuartiles(extSemName, objArray);
-    chartData.push(semesterData);
-
-    return chartData;
-}
-//
-function generateTable(objArray) {
-    var TocHtml = "";
-    var labelArray = getLabels(objArray);
-    var colWidth = 80;
-    labelArray.forEach(function (label) {
-        TocHtml = TocHtml + "<table style=\"z-index: 100000;\" class='tocTable'><tbody>";
-        TocHtml = TocHtml + "<tr><td colspan='4'>" + label + "</td></tr>";
-        TocHtml = TocHtml + "<tr class='thead'><td width='" + colWidth + "'>CRN</td><td width='" + colWidth + "'>Score</td><td width='" + colWidth + "'>Standard Deviation</td><td width='" + colWidth + "'>Num Responses</td></tr>";
-        objArray.forEach(function (eval) {
-            console.log(eval);
-            if (label == labelContainer(eval, labelgroupby)) {
-                TocHtml = TocHtml + '<tr><td><a href="#class' + eval.crn + '-' + eval.semesterNum + '-' + eval.yearOriginal + '">' + eval.crn + "</a></td><td>" + eval.score + "</td><td>" + eval.stddev + "</td><td>" + eval.totalRespondents + "</td></tr>";
-            }
-        });
-        TocHtml = TocHtml + "</tbody></table>"
+        if (a.instructor < b.instructor)
+            return -1;
+        if (a.instructor > b.instructor)
+            return 1;
+        else
+            return 0;
     });
-    console.log(TocHtml);
-    $("#table").append(TocHtml);
+
+    generateScoreTable(tableData);
 }
 
-function getLabels(objArray) {
-    var labelArray = [];
-    //determine the number of Labels
-    objArray.forEach(function (eval) {
+function sortSemester()
+{
 
-        // add in the semester number so that we can sort and add * so we can split out that num later
-        label = labelContainer(eval, labelgroupby);
+    tableData.sort(function (a, b) {
 
-        /* label=labelContainer(eval.year, eval.semesterName);           
-         label=labelContainer(eval.year, eval.semesterName);*/
+       
+        return parseInt("" + a.year + a.semester) - parseInt("" + b.year + b.semester);
+    });
+
+    generateScoreTable(tableData);
+
+}
+function sortClassName()
+{
+    tableData.sort(function (a, b) {
+
+        if (a.course < b.course)
+            return -1;
+        if (a.course > b.course)
+            return 1;
+        else
+            return 0;
         
-        if (!(labelArray.indexOf(label) > -1)) {
-            labelArray.push(label);
-        }
-        //end foreach loop
     });
-    //Sort labels into order.
-    labelArray.sort();
-    // Rename Labels to semester name instead of number
+    generateScoreTable(tableData);
+}
 
-    return labelArray;
+function sortKey()
+{
+    tableData.sort(function (a, b) {
+        //we'll use getcolorzindex to help determine order when sorting by key
+        return getColorZIndex(b.marker) - getColorZIndex(a.marker);
+    });
+    generateScoreTable(tableData);
 }

@@ -10,7 +10,7 @@ class YearSemestersController
 {
 	public static function getAllYearsAndSemesters(){
 		$db = DatabaseConnection::getInstance();
-		
+		console.log("made it to yearSemestersControlelr")
 		// will return rows like:
 		// 2017, 3
 		// 2017, 2
@@ -19,11 +19,11 @@ class YearSemestersController
 		// 2016, 2
 		// ...
 		$queryGetAllYearsAndSemesters = '
-			SELECT distinct year as Year, semester as SemesterID, Name as SemesterName
+			SELECT distinct cs.year as Year, s.semester as SemesterID, Name as SemesterName
 			FROM CourseSections cs
 			JOIN Semester s
-			ON cs.semester = s.SemesterID
-			ORDER BY year desc, semester desc
+			ON cs.semester = s.ID
+			ORDER BY year desc, s.semester desc
 		';
 		
 		$stmtGetAllYearsAndSemesters = $db->prepare($queryGetAllYearsAndSemesters);

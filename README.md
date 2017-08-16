@@ -28,6 +28,8 @@ Views		Controllers	API/api.php		DatabaseCreation, and API/Controllers
 html/css	js		php			sql (in php files)
 				(See API/README.md)	
 ```
+
+Summer 2017: We tried to keep everything the same as far as languages from the previous group, however once we met with Chitester they told us that they were changing languages and what we had done would have to be rewritten. However, after talking with Brad, we are going to keep everything the way it is because it should be pretty independent from chitester system with the exception of the database. We created an API similar to the previous group. We had many issues with setting up the database with the scripts given to us from the previous group (see the readme under the database creation frolder). Get with chitester early on and ask for permission to access the dev website (https://chitester1dev.weber.edu). We couldn't get access to this for a while and it made things hard to debug and run.
 	
 ## File structure explaination
 ### Overview of current folders:
@@ -45,7 +47,7 @@ Notes:
 			
 #### DatabaseCreation
 Content: A series of SQL scripts used to construct a local database. Each script both creates the table named in the script and populates it with test data. 
-Notes: It wouldn't hurt to ask Chitester for an updated data dump to insert into each table. I would also recommend setting up the database on a remote server instead of just working with a local one. (Might actually be required for the API to work.) We (spring 2017) spoke to Rob Hilton about setting it up on Titan and did so with minimal fuss.
+Notes: It wouldn't hurt to ask Chitester for an updated data dump to insert into each table. I would also recommend setting up the database on a remote server instead of just working with a local one. (Might actually be required for the API to work.) We (spring 2017) spoke to Rob Hilton about setting it up on Titan and did so with minimal fuss. We(summer 2017) tried contacting Rob Hilton, however he was hard to reach, so we contacted Patrick Beck and had him help us.
 *Need to clean this folder out some and move SQL scripts scattered throughout the project into it*
 *Does 22_Functions_StoredProcs have all of both?*
 			
@@ -76,8 +78,17 @@ List of added stored procedures
 
 ### Generating a report
 
-### Secretary Page
-See Hand off video for additional details.
+We (summer 2017) focused a lot of time on trying to get the Class_Breakdown and the Pingraph web pages to pull correct data. We have the pingraph pretty much there. The scores being displayed are incorrect because of the math used to average the scores. For the Class_Breakdown page, we are really close. We can see the data is there if we go to the actual url with the CRN, semester, and year, but we are having issues saying that we are not logged in. We are going to try and place these pages on the dame server as chitester and see if this solves the error.
+
+### Office Administrator Page
+See Hand off video for additional details from spring 2017.
+We (summer 2017) have created a nice accordion style page for this. It is called PermissionPage. This is pulling from the database, however we do not have tables created to allow us to save to the database.
+
+### Box and Whisker Page
+
+Let’s be honest…. I didn’t accomplish much. Drawing lines is proving to be a little difficult and I struggle as it is. I created BWchart.html, BWchart.css, and boxAndWhiskerChart.js. Why the difference in names? If you met me, you’d understand. I get confused and I named one way different so I wouldn’t click on all 3 to get to the one I wanted. BWchart.html was primarily copied and pasted from the previous groups code with their pinGraph.html. There were obviously a few changes, but the skeleton is basically the same. BWchart.css is exactly like pinGraph.css. No difference. boxAndWhiskerChart.js was also copied and pasted from pinGraph.js, but this code has had most of the changes. I had issues from the beginning with trying to manipulate it into a box and whisker plot. The first issue is you must click one of the zoom buttons for any lines to show up. I couldn’t figure that one out. If you can, you get a gold star. Next issue is……. MATH. The vertical lines are where they should be. In the end, we started to like each other slightly… like the step-brother you really didn’t want… but we warmed up. It’s still not perfect though. The math of the outliers needs help.
+
+
 
 ### Deployment
-Reach out to Brad and Chitester for this one. Good luck.
+Reach out to Brad and Chitester for this one. Also check and see if chitester is using a different language and adjust the project early if necessary. Good luck.
