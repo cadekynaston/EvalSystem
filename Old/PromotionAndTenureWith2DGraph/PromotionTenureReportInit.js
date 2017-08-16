@@ -5,7 +5,6 @@ require.config({
   }
 });
 require(['tgz', 'chart'], function(tgz, chart, $) {
-  console.log($);
   var report = new Report();
   report.onLoad();
 })
