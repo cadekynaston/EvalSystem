@@ -1,57 +1,61 @@
-
 // this should be populated from the selectionFlow.
 // if this data was not submitted from the selectionFlow
 // we will redirect back so you can do it properly
 if(window.sessionStorage.coursesSelected){
-	var coursesToDisplay = window.sessionStorage.coursesSelected;
+	var coursesToDisplay =window.sessionStorage.coursesSelected;
+//window.sessionStorage.coursesSelected;
 }
 else{
 	var coursesToDisplay = null;
 	window.location = "selectionFlow.html";
 }
 
-console.log("You selected these courses: " + coursesToDisplay + "\n\n");
+function toKeyValPair(names, values)
+{
+	var result = {};
+	for(var i = 0; i < names.length; i++)
+	{
+		result[names[i]] = values[i];
+	}
+	return result;
+}
 
-console.log(`
-	This page is not finished, you need to make the pingraph
-	show the correct data from the specific courses selected
+// 	the API endpoint like:
 
-	the API endpoint like:
+// 	https://icarus.cs.weber.edu/~nb06777/CS4450/v1/getPingraphData
 
-	https://icarus.cs.weber.edu/~nb06777/CS4450/v1/getPingraphData
+// 	with a body like
 
-	with a body like
-
-		{
-			"courses" : ["CS2420","CS1400"],
-			"userID": 887969243
-		}
+// 		{
+// 			"courses" : ["CS2420","CS1400"],
+// 			"userID": 887969243
+// 		}
 		
-	will return all of the pingraph data for Brad Peterson to see
-	regarding these CS1400 and CS2420
+// 	will return all of the pingraph data for Brad Peterson to see
+// 	regarding these CS1400 and CS2420
 
-	in this format:
+// 	in this format:
 
-	[
-		{"TestId":"69210","teacher":"Bradley Peterson","course":"CS2420","catalogYear":"2014","calendarYear":"2014","semester":"Fall","semesterNumber":"3","Score":"3.184523","permission":"2","bannerCRN":"32940","LikertMin":"0","LikertMax":"4"},
-		{"TestId":"69210","teacher":"Bradley Peterson","course":"CS2420","catalogYear":"2014","calendarYear":"2015","semester":"Spring","semesterNumber":"1","Score":"3.198391","permission":"2","bannerCRN":"11232","LikertMin":"0","LikertMax":"4"},
-		{"TestId":"69210","teacher":"Bradley Peterson","course":"CS2420","catalogYear":"2013","calendarYear":"2014","semester":"Summer","semesterNumber":"2","Score":"3.264705","permission":"2","bannerCRN":"23750","LikertMin":"0","LikertMax":"4"},
-		...
-		trimmed for space
-		...
-		{"TestId":"69210","teacher":"Bradley Peterson","course":"CS2420","catalogYear":"2013","calendarYear":"2014","semester":"Summer","semesterNumber":"2","Score":"3.714285","permission":"2","bannerCRN":"20949","LikertMin":"0","LikertMax":"4"},
-		{"TestId":"69210","teacher":"Bradley Peterson","course":"CS2420","catalogYear":"2014","calendarYear":"2015","semester":"Summer","semesterNumber":"2","Score":"3.830449","permission":"2","bannerCRN":"21584","LikertMin":"0","LikertMax":"4"}
-	]
+// 	[
+// 		{"TestId":"69210","teacher":"Bradley Peterson","course":"CS2420","catalogYear":"2014","calendarYear":"2014","semester":"Fall","semesterNumber":"3","Score":"3.184523","permission":"2","bannerCRN":"32940","LikertMin":"0","LikertMax":"4"},
+// 		{"TestId":"69210","teacher":"Bradley Peterson","course":"CS2420","catalogYear":"2014","calendarYear":"2015","semester":"Spring","semesterNumber":"1","Score":"3.198391","permission":"2","bannerCRN":"11232","LikertMin":"0","LikertMax":"4"},
+// 		{"TestId":"69210","teacher":"Bradley Peterson","course":"CS2420","catalogYear":"2013","calendarYear":"2014","semester":"Summer","semesterNumber":"2","Score":"3.264705","permission":"2","bannerCRN":"23750","LikertMin":"0","LikertMax":"4"},
+// 		...
+// 		trimmed for space
+// 		...
+// 		{"TestId":"69210","teacher":"Bradley Peterson","course":"CS2420","catalogYear":"2013","calendarYear":"2014","semester":"Summer","semesterNumber":"2","Score":"3.714285","permission":"2","bannerCRN":"20949","LikertMin":"0","LikertMax":"4"},
+// 		{"TestId":"69210","teacher":"Bradley Peterson","course":"CS2420","catalogYear":"2014","calendarYear":"2015","semester":"Summer","semesterNumber":"2","Score":"3.830449","permission":"2","bannerCRN":"21584","LikertMin":"0","LikertMax":"4"}
+// 	]
 	
 	
 	
-	At the moment it generates a bunch of random data in a for loop.  
-	The attempted AJAX call is commented out.
-`);
+// 	At the moment it generates a bunch of random data in a for loop.  
+// 	The attempted AJAX call is commented out.
+// `);
 
 // this is hard coded for now but should be changed to
 // however chitester handles who is logged in currently
-var loggedInUser = 887969243; // this is brad peterson
+// var loggedInUser = 887969243; // this is brad peterson
 
 
 var leftBound =  0.00;
@@ -98,42 +102,7 @@ function getColorZIndex(color)
 
 function startGraph()
 {
-	if(coursesToDisplay){
-		//$.ajax(
-		//{
-		//    //url: '/misc/weber/CSEvals/ranking.cfm',
-		//    url: 'Ranking.cshtml?instructorID=887999808&semester=2&year=2014',
-		//	type: "GET",
-		//	dataType: "json",
-		//	success:function(data)
-		//	{
-		//		var dataArray;
-		//		var tableObject;
-
-		//		$.each(data.DATA, function(i, array)
-		//		{
-		//			dataArray = toKeyValPair(data.COLUMNS, array);	//CONVERTS DATA TO A KEY VALUE PAIR FOR READABILITY
-		//			tableObject = {marker:dataArray["MARKER"], course:dataArray["COURSE"], instructor:dataArray["INAME"], score:dataArray["INSTRUCTORAVERAGE"], semester:dataArray["SEMESTER"],year:dataArray["YEAR"]};
-		//			graphObjectArray.push(tableObject);
-		//		});
-
-		//		graphObjectArray.sort(function (a, b) {
-		//		    return a.score - b.score;
-		//		})
-
-		//		barGraph();
-
-		//		tableData = graphObjectArray;
-
-		//		graphObjectArray.sort(function (a, b) {
-		//		    return b.score - a.score;
-		//		});
-		//		generateScoreTable(graphObjectArray);
-		//	}
-		//});
-
-		//var graphObjectArray = new Array();//[graphObject, graphObject2, graphObject3, graphObject4, graphObject5, graphObject6, graphObject7, graphObject8, graphObject9];
-		
+	 if(coursesToDisplay){
 		//generate random markers to use as mock data. 
 		 for (var i = 0; i < 200; i++)
 		 {
@@ -185,18 +154,21 @@ function barGraph()
 {
 
 	//MAIN TABLE AND FIRST SELECTION OF DATA
+
 	createResults();	
 	
 }
 //Function that puts the graph results on the bar graph
 function createResults()
 {
+	console.log("You are at the top of the function.");
     var html = "";
-    var mainRow = document.getElementById('mainrow');
+	var mainRow = document.getElementById('mainrow');
+	console.log(mainRow);
     //html += "<tr id = 'mainrow' align = 'center'><td colspan = '9' width = '900px' >";
     html += "<td colspan = '9' width = '900px' >";
     html += "<img src='../Images/blackbar.png' style='padding-left: 7px;' height = '55%' width='100%' id='graphimage'>";
-	
+
 	var startIndex = 0;	//START THE NUMBER LINE
 
 	html += "<div id='graphData' style = 'position:relative;'>";
@@ -225,9 +197,6 @@ function createResults()
 
 		if (i != 0)
 		{
-		    
-
-
 		    if (graphObjectArray[i - 1]["score"] == graphObjectArray[i]["score"])
 			{
 				top -= 8;
@@ -240,6 +209,7 @@ function createResults()
 				zindex = getColorZIndex(color);
 			}
 		}
+
 		var semester = null;
 		var year = null;
 
@@ -258,7 +228,8 @@ function createResults()
 		            year--;
 		            break;
 		        case 3:
-		            semester = "Spring";
+					semester = "Spring";
+					year--;
 		            break;
 		    }
 		    
@@ -349,10 +320,9 @@ function createResults()
 	{
 	    graphData.innerHTML += "<div style = 'position: absolute; top:0px; left:" + (((((i - leftBound) * 225) / 900) * 100) * (4 / (rightBound - leftBound))) + "%;'>" + (startIndex + i).toFixed(1) + "</div>";
 	}
-
-	//graphData.innerHTML = html;
-    //return html;
-
+	
+	graphData.innerHTML = html;
+	return html;
 }
 
 
@@ -405,11 +375,6 @@ function endRightClick()
 	if (typeof(action_timeout) != "undefined") clearTimeout(action_timeout);
 }
 
-
-
-
-
-
 function zoomOutAction()
 {
 	if (rightBound - leftBound < rightScale - leftScale)
@@ -461,16 +426,15 @@ function endZoomIn()
 function regenerate()
 {
 	
-	var newChart = "";
-	
+	var newChart = "";	
 	newChart += ""
-	
 	newChart += "<tr align = 'center'><td colspan = '9' width = '900px' >";
-
 	newChart += "<img src='../Images/blackbar.png' style='padding-left: 7px;' height = '55%' width='100%' id='graphimage2'>";
 	
 	//var tablePos = document.getElementById('graphimage2');
-	
+
+	//Left Quartile
+	//Right Quartile
 	var startIndex = 0;	//START THE NUMBER LINE
 
 	newChart += "<div style = 'position:relative;'>";
@@ -526,62 +490,73 @@ function regenerate()
 
 		}
 
-		if (graphObjectArray[i]["score"] >= leftBound && graphObjectArray[i]["score"] <= rightBound)
-		{
-			if (graphObjectArray[i]["marker"] == "red")
-			{
-			    if (graphObjectArray[i].semester != null && graphObjectArray[i].year != null)
-			    {
-			        newChart += "<img style='position: absolute; z-index: " + zindex + "; left:" + (((((graphObjectArray[i]["score"] - leftBound) * 225) / 900) * 100) * (4 / (rightBound - leftBound))) + "%; top: " + top + "px;'  title='" + graphObjectArray[i]["instructor"] + " - " + graphObjectArray[i]["course"] + " - " + semester + " " + year + ": " + graphObjectArray[i]["score"] + "' src = '../Images/RedPinSmall.png'>";
-			    }
-			    else {
-			        newChart += "<img style='position: absolute; z-index: " + zindex + "; left:" + (((((graphObjectArray[i]["score"] - leftBound) * 225) / 900) * 100) * (4 / (rightBound - leftBound))) + "%; top: " + top + "px;'  title='" + graphObjectArray[i]["instructor"] + " - " + graphObjectArray[i]["course"] + ": " + graphObjectArray[i]["score"] + "' src = '../Images/RedPinSmall.png'>";
-			    }
+		// if (graphObjectArray[i]["score"] >= leftBound && graphObjectArray[i]["score"] <= rightBound)
+		// {
+		// 	if (graphObjectArray[i]["marker"] == "red")
+		// 	{
+		// 	    if (graphObjectArray[i].semester != null && graphObjectArray[i].year != null)
+		// 	    {
+		// 	        newChart += "<img style='position: absolute; z-index: " + zindex + "; left:" + (((((graphObjectArray[i]["score"] - leftBound) * 225) / 900) * 100) * (4 / (rightBound - leftBound))) + "%; top: " + top + "px;'  title='" + graphObjectArray[i]["instructor"] + " - " + graphObjectArray[i]["course"] + " - " + semester + " " + year + ": " + graphObjectArray[i]["score"] + "' src = '../Images/RedPinSmall.png'>";
+		// 	    }
+		// 	    else {
+		// 	        newChart += "<img style='position: absolute; z-index: " + zindex + "; left:" + (((((graphObjectArray[i]["score"] - leftBound) * 225) / 900) * 100) * (4 / (rightBound - leftBound))) + "%; top: " + top + "px;'  title='" + graphObjectArray[i]["instructor"] + " - " + graphObjectArray[i]["course"] + ": " + graphObjectArray[i]["score"] + "' src = '../Images/RedPinSmall.png'>";
+		// 	    }
 				
-			}
-			else if (graphObjectArray[i]["marker"] == "green")
-			{
-			    if (graphObjectArray[i].semester != null && graphObjectArray[i].year != null)
-			    {
-			        newChart += "<img style='position: absolute; z-index: " + zindex + "; left:" + (((((graphObjectArray[i]["score"] - leftBound) * 225) / 900) * 100) * (4 / (rightBound - leftBound))) + "%; top: " + top + "px;'  title='" + graphObjectArray[i]["instructor"] + " - " + graphObjectArray[i]["course"] + " - " + semester + " " + year + ": " + graphObjectArray[i]["score"] + "' src = '../Images/GreenPinSmall.png'>";
-			    }
-			    else
-			    {
-			        newChart += "<img style='position: absolute; z-index: " + zindex + "; left:" + (((((graphObjectArray[i]["score"] - leftBound) * 225) / 900) * 100) * (4 / (rightBound - leftBound))) + "%; top: " + top + "px;'  title='" + graphObjectArray[i]["instructor"] + " - " + graphObjectArray[i]["course"] + ": " + graphObjectArray[i]["score"] + "' src = '../Images/GreenPinSmall.png'>";
-			    }
+		// 	}
+		// 	else if (graphObjectArray[i]["marker"] == "green")
+		// 	{
+		// 	    if (graphObjectArray[i].semester != null && graphObjectArray[i].year != null)
+		// 	    {
+		// 	        newChart += "<img style='position: absolute; z-index: " + zindex + "; left:" + (((((graphObjectArray[i]["score"] - leftBound) * 225) / 900) * 100) * (4 / (rightBound - leftBound))) + "%; top: " + top + "px;'  title='" + graphObjectArray[i]["instructor"] + " - " + graphObjectArray[i]["course"] + " - " + semester + " " + year + ": " + graphObjectArray[i]["score"] + "' src = '../Images/GreenPinSmall.png'>";
+		// 	    }
+		// 	    else
+		// 	    {
+		// 	        newChart += "<img style='position: absolute; z-index: " + zindex + "; left:" + (((((graphObjectArray[i]["score"] - leftBound) * 225) / 900) * 100) * (4 / (rightBound - leftBound))) + "%; top: " + top + "px;'  title='" + graphObjectArray[i]["instructor"] + " - " + graphObjectArray[i]["course"] + ": " + graphObjectArray[i]["score"] + "' src = '../Images/GreenPinSmall.png'>";
+		// 	    }
 				
-			}
-			else if (graphObjectArray[i]["marker"] == "blue")
-			{
-			    if (graphObjectArray[i].semester != null && graphObjectArray[i].year != null)
-			    {
-			        newChart += "<img style='position: absolute; z-index: " + zindex + "; left:" + (((((graphObjectArray[i]["score"] - leftBound) * 225) / 900) * 100) * (4 / (rightBound - leftBound))) + "%; top: " + top + "px;'  title='" + graphObjectArray[i]["instructor"] + " - " + graphObjectArray[i]["course"] + " - " + semester + " " + year + ": " + graphObjectArray[i]["score"] + "' src = '../Images/BluePinSmall.png'>";
-			    }
-			    else {
-			        newChart += "<img style='position: absolute; z-index: " + zindex + "; left:" + (((((graphObjectArray[i]["score"] - leftBound) * 225) / 900) * 100) * (4 / (rightBound - leftBound))) + "%; top: " + top + "px;'  title='" + graphObjectArray[i]["instructor"] + " - " + graphObjectArray[i]["course"] + ": " + graphObjectArray[i]["score"] + "' src = '../Images/BluePinSmall.png'>";
-			    }
+		// 	}
+		// 	else if (graphObjectArray[i]["marker"] == "blue")
+		// 	{
+		// 	    if (graphObjectArray[i].semester != null && graphObjectArray[i].year != null)
+		// 	    {
+		// 	        newChart += "<img style='position: absolute; z-index: " + zindex + "; left:" + (((((graphObjectArray[i]["score"] - leftBound) * 225) / 900) * 100) * (4 / (rightBound - leftBound))) + "%; top: " + top + "px;'  title='" + graphObjectArray[i]["instructor"] + " - " + graphObjectArray[i]["course"] + " - " + semester + " " + year + ": " + graphObjectArray[i]["score"] + "' src = '../Images/BluePinSmall.png'>";
+		// 	    }
+		// 	    else {
+		// 	        newChart += "<img style='position: absolute; z-index: " + zindex + "; left:" + (((((graphObjectArray[i]["score"] - leftBound) * 225) / 900) * 100) * (4 / (rightBound - leftBound))) + "%; top: " + top + "px;'  title='" + graphObjectArray[i]["instructor"] + " - " + graphObjectArray[i]["course"] + ": " + graphObjectArray[i]["score"] + "' src = '../Images/BluePinSmall.png'>";
+		// 	    }
 				
-			}
-		}
+		// 	}
+		// }
 	}
 
 	
-	var top2 = -103;
+	var top2 = -160;
+
+	// Q1
+	//CALCULATE AND POSITION LEFTMOST QUARTILE ("QUARTILE I")
+	var Q1 = 0.0;
+	if (graphObjectArray.length %2 == 0)
+	{
+		Q1 = (parseFloat(graphObjectArray[(graphObjectArray.length / 2)]["score"]) + parseFloat(graphObjectArray[((graphObjectArray.length / 2))]["score"])) / 4;
+	}
+	else
+	{
+		Q1 = graphObjectArray[parseInt((graphObjectArray.length / 2) - .5)]["score"];
+	}
 	
-	//CALCULATE AND POSITION LEFTMOST DATAPOINT ("LOW")
-	if (graphObjectArray[0]["score"] >= leftBound && graphObjectArray[0]["score"] <= rightBound)
+	
+	if (Q1 >= leftBound && Q1 <= rightBound)
 	{
-		newChart+="<img style='position: absolute;	left:" + (((((graphObjectArray[0]["score"] - leftBound) * 225) / 900) * 100) * (4 / (rightBound - leftBound))) + "%; top:" + (top2 + 70) + "px;'  title='Low Score' src = '../Images/PointPinSmall.png'>";
-		newChart+="<div id = 'lowLabel' style='position: absolute; left:" + ((((((graphObjectArray[0]["score"] - leftBound) * 225) / 900) * 100) * (4 / (rightBound - leftBound))) - (2.5)) +  "%; top:" + (top2 + 140) + "px;'>Low</div>";
+		newChart+="<img id = 'medImage' style='position: absolute;	left:" + (((((Q1 - leftBound) * 225) / 900) * 100) * (4 / (rightBound - leftBound))) + "%; top:" + (top2 + 70) + "px;'  title='Q1' src = '../Images/quartiles.png'>";
+		newChart+="<div style='position: absolute; left:" + ((((((Q1 - leftBound) * 225) / 900) * 100) * (4 / (rightBound - leftBound))) - 1.7) + "%; top:" + (top2 + 140) + "px; text-align:center'>Q1</div>";
 	}
-		
-	//CALCULATE AND POSITION RIGHTMOST DATAPOINT ("HIGH")
-	if (graphObjectArray[graphObjectArray.length - 1]["score"] >= leftBound && graphObjectArray[graphObjectArray.length - 1]["score"] <= rightBound)
+	
+	for (var i = leftScale; i <= rightScale ; i = i + .5)
 	{
-		newChart+="<img style='position: absolute;	left:"  + (((((graphObjectArray[graphObjectArray.length - 1]["score"] - leftBound) * 225) / 900) * 100) * (4 / (rightBound - leftBound)))+ "%; top:" + (top2 + 70) + "px;'  title='High Score' src = '../Images/PointPinSmall.png'>";
-		newChart+="<div id = 'highLabel' style='position: absolute; left:"  + (((((graphObjectArray[graphObjectArray.length - 1]["score"] - leftBound) * 225) / 900) * 100) * (4 / (rightBound - leftBound)) + (1.0)) + "%; top:" + (top2 + 140) + "px;'>High</div>";
+		if (i >= leftBound && i <= rightBound)
+			newChart+="<div style = 'position: absolute; top:0px; left:" + (((((i - leftBound) * 225) / 900) * 100) * (4 / (rightBound - leftBound))) + "%;'>" + nearestHalf(startIndex + i).toFixed(1) + "</div>";
 	}
-		
+
 	//CALCULATE AND POSITION MIDDLEMOST DATAPOINT ("MEDIAN")
 	var median = 0.0;
 	if (graphObjectArray.length %2 == 0)
@@ -596,11 +571,122 @@ function regenerate()
 	
 	if (median >= leftBound && median <= rightBound)
 	{
-		newChart+="<img id = 'medImage' style='position: absolute;	left:" + (((((median - leftBound) * 225) / 900) * 100) * (4 / (rightBound - leftBound))) + "%; top:" + (top2 + 70) + "px;'  title='Median' src = '../Images/PointPinSmall.png'>";
+		newChart+="<img id = 'medImage' style='position: absolute;	left:" + (((((median - leftBound) * 225) / 900) * 100) * (4 / (rightBound - leftBound))) + "%; top:" + (top2 + 70) + "px;'  title='Median' src = '../Images/quartiles.png'>";
 		newChart+="<div style='position: absolute; left:" + ((((((median - leftBound) * 225) / 900) * 100) * (4 / (rightBound - leftBound))) - 1.7) + "%; top:" + (top2 + 140) + "px; text-align:center'>Median</div>";
 	}
 	
 
+	
+	for (var i = leftScale; i <= rightScale ; i = i + .5)
+	{
+		if (i >= leftBound && i <= rightBound)
+			newChart+="<div style = 'position: absolute; top:0px; left:" + (((((i - leftBound) * 225) / 900) * 100) * (4 / (rightBound - leftBound))) + "%;'>" + nearestHalf(startIndex + i).toFixed(1) + "</div>";
+	}
+
+	//Q3
+	//CALCULATE AND POSITION LEFTMOST QUARTILE ("QUARTILE III")
+	var Q3 = 0.0;
+	if (graphObjectArray.length %2 == 0)
+	{
+		Q3 = (parseFloat(graphObjectArray[(graphObjectArray.length / 2)]["score"]) + parseFloat(graphObjectArray[((graphObjectArray.length / 2))]["score"])) * .75;
+	}
+	else
+	{
+		Q3 = graphObjectArray[parseInt((graphObjectArray.length / 2) - .5)]["score"];
+	}
+	
+	
+	if (Q3 >= leftBound && Q3 <= rightBound)
+	{
+		newChart+="<img id = 'medImage' style='position: absolute;	left:" + (((((Q3 - leftBound) * 225) / 900) * 100) * (4 / (rightBound - leftBound))) + "%; top:" + (top2 + 70) + "px;'  title='Q3' src = '../Images/quartiles.png'>";
+		newChart+="<div style='position: absolute; left:" + ((((((Q3 - leftBound) * 225) / 900) * 100) * (4 / (rightBound - leftBound))) - 1.7) + "%; top:" + (top2 + 140) + "px; text-align:center'>Q3</div>";
+	}
+	
+	for (var i = leftScale; i <= rightScale ; i = i + .5)
+	{
+		if (i >= leftBound && i <= rightBound)
+			newChart+="<div style = 'position: absolute; top:0px; left:" + (((((i - leftBound) * 225) / 900) * 100) * (4 / (rightBound - leftBound))) + "%;'>" + nearestHalf(startIndex + i).toFixed(1) + "</div>";
+	}
+	
+	//CALCULATE AND POSITION LEFTMOST DATAPOINT ("LEFT OUTLIER")
+	var LeftOutlier = (((((graphObjectArray[0]["score"] - leftBound) * 225) / 900) * 100) * (4 / (rightBound - leftBound)));
+	if (graphObjectArray[0]["score"] >= leftBound && graphObjectArray[0]["score"] <= rightBound)
+	{
+		newChart+="<img style='position: absolute;	left:" + (((((graphObjectArray[0]["score"] - leftBound) * 225) / 900) * 100) * (4 / (rightBound - leftBound))) + "%; top:" + (top2 + 70) + "px;'  title='Left Outlier' src = '../Images/quartiles.png'>";
+		newChart+="<div id = 'lowLabel' style='position: absolute; left:" + ((((((graphObjectArray[0]["score"] - leftBound) * 225) / 900) * 100) * (4 / (rightBound - leftBound))) - (2.5)) +  "%; top:" + (top2 + 140) + "px;'>Left Outlier</div>";
+	}
+
+	
+	// this is the pinpoint
+	// if (graphObjectArray[graphObjectArray.length - 1]["score"] >= leftBound && graphObjectArray[graphObjectArray.length - 1]["score"] <= rightBound)
+	// {
+	//     newChart += "<img style='position: absolute;	left:" + (((((graphObjectArray[graphObjectArray.length - 1]["score"] - leftBound) * 225) / 900) * 100) * (4 / (rightBound - leftBound))) + "%; top:" + (top2 + 70) + "px;'  title='High Score' src = '../Images/PointPinSmall.png'>";
+	//     newChart += "<div id = 'highLabel' style='position: absolute; left:" + (((((graphObjectArray[graphObjectArray.length - 1]["score"] - leftBound) * 225) / 900) * 100) * (4 / (rightBound - leftBound)) + (1.0)) + "%; top:" + (top2 + 140) + "px;'>High</div>";
+	// }
+
+	//CALCULATE AND POSITION RIGHTMOST DATAPOINT ("RIGHT OUTLIER")
+	if (graphObjectArray[graphObjectArray.length - 1]["score"] >= leftBound && graphObjectArray[graphObjectArray.length - 1]["score"] <= rightBound)
+	{
+		newChart+="<img style='position: absolute;	left:"  + (((((graphObjectArray[graphObjectArray.length - 1]["score"] - leftBound) * 225) / 900) * 100) * (4 / (rightBound - leftBound)))+ "%; top:" + (top2 + 70) + "px;'  title='Right Outlier' src = '../Images/quartiles.png'>";
+		newChart+="<div id = 'highLabel' style='position: absolute; left:"  + (((((graphObjectArray[graphObjectArray.length - 1]["score"] - leftBound) * 225) / 900) * 100) * (4 / (rightBound - leftBound)) + (1.0)) + "%; top:" + (top2 + 140) + "px;'>Right Outlier</div>";
+	}
+
+	//TOP AND BOTTOM BOX LINES OF BOX
+	var leftBox = ((((Q1 - leftBound) * 225) / 900) * 100) * (4 / (rightBound - leftBound));
+	var rightBox = ((((Q3 - leftBound) * 225) / 900) * 100) * (4 / (rightBound - leftBound));
+	var Q1 = 0.0;
+	if (graphObjectArray.length %2 == 0)
+	{
+		Q1 = (parseFloat(graphObjectArray[(graphObjectArray.length / 2)]["score"]) + parseFloat(graphObjectArray[((graphObjectArray.length / 2))]["score"])) / 4;
+	}
+	else
+	{
+		Q1 = graphObjectArray[parseInt((graphObjectArray.length / 2) - .5)]["score"];
+	}
+	
+	
+	if (Q1 >= leftBound && Q3 <= rightBound)
+	{
+		//window.alert("q1:" +leftBox + " Q3: " + rightBox + " (Q3-Q1): " + (rightBox-leftBox));
+		newChart+="<img id = 'medImage' style='position: absolute;	left:" + (((((Q1 - leftBound) * 225) / 900) * 100) * (4 / (rightBound - leftBound))) + "%; width:" + (rightBox - leftBox) +  "%; height: 15px; top:" + (top2 + 70) + "px;'  title='BOX LINES' src = '../Images/BoxTopBottomLines.png'>";
+		newChart+="<div style='position: absolute; left:" + ((((((Q1 - leftBound) * 225) / 900) * 100) * (4 / (rightBound - leftBound))) - 1.7) + "%; top:" + (top2 + 140) + "px; text-align:center'>Q1</div>";
+	}
+
+	for (var i = leftScale; i <= rightScale ; i = i + .5)
+	{
+		if (i >= leftBound && i <= rightBound)
+			newChart+="<div style = 'position: absolute; top:0px; left:" + (((((i - leftBound) * 225) / 900) * 100) * (4 / (rightBound - leftBound))) + "%;'>" + nearestHalf(startIndex + i).toFixed(1) + "</div>";
+	}
+
+	//LINE FROM LEFT OUTLIER TO Q1 ON BOX
+	var LeftOut1 = ((((graphObjectArray[0]["score"] - leftBound) * 225) / 900) * 100) * (4 / (rightBound - leftBound));
+	var LeftOut2 = ((((Q1 - leftBound) * 225) / 900) * 100) * (4 / (rightBound - leftBound));
+	if (graphObjectArray[0]["score"] >= leftBound && graphObjectArray[0]["score"] <= rightBound)
+	{
+		newChart+="<img style='position: absolute;	left:" + (((((graphObjectArray[0]["score"] - leftBound) * 225) / 900) * 100) * (4 / (rightBound - leftBound))) + "%;  width:" + (LeftOut2 - LeftOut1) +  "%; height: 15px; top:" + (top2 + 70) + "px;' src = '../Images/LineBoxToOutlier.png'>";
+		newChart+="<div id = 'lowLabel' style='position: absolute; left:" + ((((((graphObjectArray[0]["score"] - leftBound) * 225) / 900) * 100) * (4 / (rightBound - leftBound))) - (2.5)) +  "%; top:" + (top2 + 140) + "px;'></div>";
+	}
+
+	//LINE FROM Q3 ON BOX TO RIGHT OUTLIER()
+	//var Q3 = 0.0;
+	var RightOut1 = ((((graphObjectArray[graphObjectArray.length - 1]["score"] - leftBound) * 225) / 900) * 100) * (4 / (rightBound - leftBound)); 
+	var RightOut2 = ((((Q3 - leftBound) * 225) / 900) * 100) * (4 / (rightBound - leftBound));
+
+	if (graphObjectArray.length %2 == 0)
+	{
+		Q3 = (parseFloat(graphObjectArray[(graphObjectArray.length / 2)]["score"]) + parseFloat(graphObjectArray[((graphObjectArray.length / 2))]["score"])) * .75;
+	}
+	else
+	{
+		Q3 = graphObjectArray[parseInt((graphObjectArray.length / 2) - .5)]["score"];
+	}
+	
+	
+	if (Q3 >= leftBound && Q3 <= rightBound)
+	{
+		newChart+="<img id = 'medImage' style='position: absolute;	left:" + (((((Q3 - leftBound) * 225) / 900) * 100) * (4 / (rightBound - leftBound))) + "%; width:" + (RightOut1 - RightOut2) +  "%; height: 15px; top:" + (top2 + 70) + "px;'  title='Q3' src = '../Images/LineBoxToOutlier.png'>";
+		newChart+="<div style='position: absolute; left:" + ((((((Q3 - leftBound) * 225) / 900) * 100) * (4 / (rightBound - leftBound))) - 1.7) + "%; top:" + (top2 + 140) + "px; text-align:center'></div>";
+	}
 	
 	for (var i = leftScale; i <= rightScale ; i = i + .5)
 	{
@@ -623,57 +709,57 @@ function nearestHalf(value)
 
 function generateScoreTable(scoreArray)
 {
-    var table = document.getElementById('tabularScores');
-    table.innerHTML = "";
+    // var table = document.getElementById('tabularScores');
+    // table.innerHTML = "";
     
 
-    if(!table)
-    {
-        return;
-    }
+    // if(!table)
+    // {
+    //     return;
+    // }
 
     
-    var html = "";
+    // var html = "";
 
-    html += "<tr>";
-    html += "<th class='sortableHeader' onclick='setTimeout(0,sortKey());'>Key</th>"
-    html += "<th class='sortableHeader' onclick='setTimeout(0,sortClassName());'>Class</th>";
-    html += "<th class='sortableHeader' onclick='setTimeout(0,sortInstructor());'>Instructor</th>";
-    html += "<th class='sortableHeader' onclick='setTimeout(0,sortSemester());'>Semester</th>";
-    html += "<th class='sortableHeader' onclick='setTimeout(0,sortScore());'>Score</th>";
-    html += "</tr>";
+    // html += "<tr>";
+    // html += "<th class='sortableHeader' onclick='setTimeout(0,sortKey());'>Key</th>"
+    // html += "<th class='sortableHeader' onclick='setTimeout(0,sortClassName());'>Class</th>";
+    // html += "<th class='sortableHeader' onclick='setTimeout(0,sortInstructor());'>Instructor</th>";
+    // html += "<th class='sortableHeader' onclick='setTimeout(0,sortSemester());'>Semester</th>";
+    // html += "<th class='sortableHeader' onclick='setTimeout(0,sortScore());'>Score</th>";
+    // html += "</tr>";
 
-    for (var i = 0; i < scoreArray.length; i++)
-    {
-        var semester = "";
-        var semesterNum = parseInt(scoreArray[i].semester);
-        year = parseInt(scoreArray[i].year);
-        switch (semesterNum) {
-            case 1:
-                semester = "Summer";
-                year--;
-                break;
-            case 2:
-                semester = "Fall";
-                year--;
-                break;
-            case 3:
-                semester = "Spring";
-                break;
-        }
-
-
-        html += "<tr>";
-        html += "<td style=background-color:" + scoreArray[i].marker +"></td>";
-        html += "<td>" + scoreArray[i].course + "</td>";
-        html += "<td>" + scoreArray[i].instructor + "</td>";
-        html += "<td>" + semester + " " + year + "</td>";
-        html += "<td>" + scoreArray[i].score.toFixed(2) + "</td>";
-    }
+    // for (var i = 0; i < scoreArray.length; i++)
+    // {
+    //     var semester = "";
+    //     var semesterNum = parseInt(scoreArray[i].semester);
+    //     year = parseInt(scoreArray[i].year);
+    //     switch (semesterNum) {
+    //         case 1:
+    //             semester = "Summer";
+    //             year--;
+    //             break;
+    //         case 2:
+    //             semester = "Fall";
+    //             year--;
+    //             break;
+    //         case 3:
+    //             semester = "Spring";
+    //             break;
+    //     }
 
 
+    //     html += "<tr>";
+    //     html += "<td style=background-color:" + scoreArray[i].marker +"></td>";
+    //     html += "<td>" + scoreArray[i].course + "</td>";
+    //     html += "<td>" + scoreArray[i].instructor + "</td>";
+    //     html += "<td>" + semester + " " + year + "</td>";
+    //     html += "<td>" + scoreArray[i].score.toFixed(2) + "</td>";
+    // }
 
-    table.innerHTML += html;
+
+
+     //table.innerHTML += html;
         
 }
 
@@ -737,3 +823,4 @@ function sortKey()
     });
     generateScoreTable(tableData);
 }
+//)

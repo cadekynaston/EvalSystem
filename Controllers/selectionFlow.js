@@ -237,6 +237,22 @@ function buildReport() {
 	switch (checkedChoice) {
 		case "term":
 		  console.log("You chose Sort per Term.")
+			var courseListString = "";
+			var courses = document.getElementById("ICList").options;
+
+			// strip out the information we need to get objects in the form of
+			// {code: 8001, name: Computer Science}
+
+			for(var i=0; i<courses.length; i++){
+					if(courses[i].selected){
+							courseListString += courses[i].value + ",";
+					}
+			}
+			
+			// seems to have issues in Edge, but we ran out of time
+			window.sessionStorage.coursesSelected = courseListString;
+			
+			window.location="BWchart.html";
 			break;
 		case "dept":
 			console.log("You chose Sort per Department.")
