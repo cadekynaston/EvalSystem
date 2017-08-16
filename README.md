@@ -77,6 +77,7 @@ List of added stored procedures
 ## Next Steps
 
 ### Generating a report
+
 We (summer 2017) focused a lot of time on trying to get the Class_Breakdown and the Pingraph web pages to pull correct data. We have the pingraph pretty much there. The scores being displayed are incorrect because of the math used to average the scores. For the Class_Breakdown page, we are really close. We can see the data is there if we go to the actual url with the CRN, semester, and year, but we are having issues saying that we are not logged in. We are going to try and place these pages on the dame server as chitester and see if this solves the error.
 
 ### Office Administrator Page
@@ -87,5 +88,7 @@ We (summer 2017) have created a nice accordion style page for this. It is called
 
 Let’s be honest…. I didn’t accomplish much. Drawing lines is proving to be a little difficult and I struggle as it is. I created BWchart.html, BWchart.css, and boxAndWhiskerChart.js. Why the difference in names? If you met me, you’d understand. I get confused and I named one way different so I wouldn’t click on all 3 to get to the one I wanted. BWchart.html was primarily copied and pasted from the previous groups code with their pinGraph.html. There were obviously a few changes, but the skeleton is basically the same. BWchart.css is exactly like pinGraph.css. No difference. boxAndWhiskerChart.js was also copied and pasted from pinGraph.js, but this code has had most of the changes. I had issues from the beginning with trying to manipulate it into a box and whisker plot. The first issue is you must click one of the zoom buttons for any lines to show up. I couldn’t figure that one out. If you can, you get a gold star. Next issue is……. MATH. The vertical lines are where they should be. In the end, we started to like each other slightly… like the step-brother you really didn’t want… but we warmed up. It’s still not perfect though. The math of the outliers needs help.
 
+
+
 ### Deployment
-Reach out to Brad and Chitester for this one. Good luck.
+Reach out to Brad and Chitester for this one. Also check and see if chitester is using a different language and adjust the project early if necessary. Good luck.

@@ -5,8 +5,10 @@ Hello Fall 2017 class! I wanted to let you know about a few of the problems we r
 
 After trying to run the Chitester-FullDump.sql, I quickly found that it was riddled with errors. Many items were dupolicated, and with the script being extremely large, it would crash. Next I tried running each of the individual files, and continued to get errors about duplicated items. The nice thing about these individual files is since they were much smaller in size, it wouldn't crash and it would store the non-duplicated items. After setting all of this up and looking at the screen shots from the previous group, I quickly realized that some of the tables were missing. So when I tried running the program it would crash because the queries were calling tables that did not exist.  To get around this we walked through each query and adjusted it to get the data from the information we were given. In all I spent about a month trying to get the database up and running.  After we had it running we had to make minor changes to the queries in the code to ensure that the correct infromation was being retrieved.
 
-### Plans For Database Handoff To You
+
+
 We are going to get with chitester and see if we can get a new full-dump.sql for you, if not I will create a script from our database and pass that along to you.  Just remember to get access and set the database up on the Titan server.  Just an FYI, you will be using MSSQL for the database. You will need to know that for whomever sets the database up for you on Titan. For me it was Patrick Beck, I had him call it "CS4450Fall2017."
+
 
 ## Spring 2017
 ## Database Creation
