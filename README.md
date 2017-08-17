@@ -78,7 +78,11 @@ List of added stored procedures
 
 ### Generating a report
 
-We (summer 2017) focused a lot of time on trying to get the Class_Breakdown and the Pingraph web pages to pull correct data. We have the pingraph pretty much there. The scores being displayed are incorrect because of the math used to average the scores. For the Class_Breakdown page, we are really close. We can see the data is there if we go to the actual url with the CRN, semester, and year, but we are having issues saying that we are not logged in. We are going to try and place these pages on the dame server as chitester and see if this solves the error.
+We (summer 2017) focused a lot of time on trying to get the Class_Breakdown and the Pingraph web pages to pull correct data. We have the pingraph pretty much there. The scores being displayed are incorrect because of the math used to average the scores. For the Class_Breakdown page, we are really close. We can see the data is there if we go to the actual url with the CRN, semester, and year, but we are having issues saying that we are not logged in. We are going to try and place these pages on the same server as chitester and see if this solves the error.
+
+Essentially what you need to do is use the selection flow to narrow down the courses for the graph to display. You should go through the selection flow and the send data to class_breakdown or pingraph. Class_breakdown is ready to go once the correct data is sent. All it needs is an array in the form [crn-semester-year, crn-semester-year, ...etc] and it will show all of the reports on one page. You can see it here: https://chitester1dev.weber.edu:6838/misc/weber/csevals/class_breakdown.html Also if you pass URL parameters you can display a single course: https://chitester1dev.weber.edu:6838/misc/weber/csevals/class_breakdown.html?CRN=30611&Semester=3&Year=2013
+There are some comments in Controllers/Class_Breakdown.js that explain a little more. 
+
 
 ### Office Administrator Page
 See Hand off video for additional details from spring 2017.
